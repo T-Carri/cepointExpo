@@ -1,36 +1,46 @@
 import { View, Text } from 'react-native'
-import React from 'react'
-import { Card, Button } from '@rneui/themed';
-
+import React, {useState} from 'react'
+import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
+import {  StyleSheet } from 'react-native';
+//import ScanScreen from './Checador/'
 
 export default function Checador() {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  
+    
+
   return (
     <View>
            <Card>
           <Card.Title>Obra: mex6</Card.Title>
           <Card.Divider />
-          <Button
-              title="QR"
-              icon={{
-                name: 'user',
-                type: 'font-awesome',
-                size: 15,
-                color: 'white',
-              }}
-              iconRight
-              iconContainerStyle={{ marginLeft: 10 }}
-              titleStyle={{ fontWeight: '700' }}
-              buttonStyle={{
-                backgroundColor: 'rgba(199, 43, 98, 1)',
-                borderColor: 'transparent',
-                borderWidth: 0,
-                borderRadius: 30,
-              }}
-              containerStyle={{
-                width: 200,
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
+
+          <Image
+          style={{ width: 200, height: 200, marginBottom: 15, marginLeft: 50 }}
+          source={require("../../assets/200.png")}
+          onPress={()=>(
+            alert('neeear')
+
+          )}
+        />
+
+
+
+
+            <ButtonGroup 
+            buttons={['Entrada', 'Salida']}
+            selectedButtonStyle={{backgroundColor : "#FFC300", color : "black"}}
+            selectedTextStyle={{ color : "black"}}
+            disabledTextStyle={{color : "white"}}
+            selectedIndex={ selectedIndex}
+            onPress={(value)=> {
+              setSelectedIndex(value)
+            }}
+            containerStyle={{ 
+              marginBottom: 20, 
+              backgroundColor : "#070101",
+              color : "white"}}
+            
             />
 
          </Card>
@@ -38,12 +48,20 @@ export default function Checador() {
   )
 }
 
+const styles = StyleSheet.create({
+  subHeader: {
+    backgroundColor : "#f9130c",
+    color : "black",
+    textAlign : "center",
+    paddingVertical : 5,
+    marginBottom : 10
+  }
+  })
 
-//TODO: JALAR DATOS DE API 
 
-//TODO: analizar "npm i qr-scanner"
+// onPress={} in the image for activate the qr service 
+// such fetch {name} in the qr an then build an interface with 
 
-//coloque url: de asignacion 
-//hacer receptor de axios en interfaz de usuario checador "asigancion"
-//hacer disparador de axios en interfaz de usuario checador
-//colocar boton  con imagen de QR con acceso a QR
+// name, entrada: Date()
+// name, salida
+// 
