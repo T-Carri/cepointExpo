@@ -15,17 +15,12 @@ import Bienvenida from '../componentes/Bienvenida';
 
 function CustomDrawerContent(props) {
   return (
+    
     <DrawerContentScrollView {...props}>
+      
       <DrawerItemList {...props} />
-      <DrawerItem
-        label="Close drawer"
-        onPress={() => props.navigation.closeDrawer()}
-      />
-      <DrawerItem
-        label="Toggle drawer"
-        onPress={() => props.navigation.toggleDrawer()}
-      />
-    </DrawerContentScrollView>
+
+  </DrawerContentScrollView>
   );
 }
 
@@ -43,6 +38,7 @@ export default function HomeScreen(){
       <Drawer.Screen name="Control de Facturas" component={ControlFacturas} />
       <Drawer.Screen name="Estado de Nomina" component={EstadoNomina} />
       <Drawer.Screen name="TuQR" component={TuQR} />
+      
     </Drawer.Navigator>
  
       );
