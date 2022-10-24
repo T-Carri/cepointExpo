@@ -1,19 +1,24 @@
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
 import { StyleSheet, Text, View, ScrollView,TextInput,TouchableOpacity,Button, Alert} from 'react-native';
-import {initializeApp} from 'firebase/app'
-import {firebaseConfig} from '../../firebase-config'
+import { app } from '../../firebase-config';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+//import { UserAuth } from '../context/AuthContext';
 //LoginScreen 
 export default function LoginScreen(){
     const [email, setEmail] = React.useState('')
     const[password, setPassword]=React.useState('')
+   // const [error, setError] = React.useState('')
     const navigation = useNavigation();
   
-    const app = initializeApp(firebaseConfig);
-    const auth= getAuth(app);  
   
-  const handleCreateAccount = () => {
+    const auth= getAuth(app);  
+   const usuario = auth.currentUser;
+   // const {signIn} = UserAuth();  
+
+
+  
+    /* const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password).then((userCredential)=>{
       console.log('Account created!')
       const user =userCredential.user;
@@ -21,18 +26,33 @@ export default function LoginScreen(){
         console.log(error)
         Alert.alert(error.message)
       })
-  }
-  const handleSignIn = () =>{
+  } */
+
+   const handleSignIn = () =>{
     signInWithEmailAndPassword(auth,email,password).then((userCredential)=>{
       console.log('Signed in!')
       const user =userCredential.user;
       console.log(user)
-      navigation.navigate('Home')
+      console.log('test usuario:', usuario)
+      navigation.navigate('Home', {screen: 'Inicio'})
     }).catch(error=>{
       console.log(error)
     })
+  } 
+/*    
+const handleSubmit = async (e)=> {
+  e.preventDefault();
+  setError('')
+  try{
+    await signIn(email, password)
+     navigation.navigate('Home')  
+  } catch (e){
+    setError(e.message)
+    console.log(e.message)
   }
-  
+
+}
+ */
   return( 
     <View style={styles.container}> 
     <ScrollView contentContainerStyle={{
