@@ -1,19 +1,19 @@
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
 import { StyleSheet, Text, View, ScrollView,TextInput,TouchableOpacity,Button, Alert} from 'react-native';
-import { app } from '../../firebase-config';
-import React from 'react';
+import {signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+import {auth} from '../../firebase-config'
+import React, {useEffect, useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 //import { UserAuth } from '../context/AuthContext';
-//LoginScreen 
+
 export default function LoginScreen(){
-    const [email, setEmail] = React.useState('')
-    const[password, setPassword]=React.useState('')
+    const [email, setEmail] = useState('')
+    const[password, setPassword]=useState('')
    // const [error, setError] = React.useState('')
     const navigation = useNavigation();
   
   
-    const auth= getAuth(app);  
-   const usuario = auth.currentUser;
+   /*  const auth= getAuth(app);  
+   const usuario = auth.currentUser; */
    // const {signIn} = UserAuth();  
 
 
@@ -28,17 +28,31 @@ export default function LoginScreen(){
       })
   } */
 
-   const handleSignIn = () =>{
-    signInWithEmailAndPassword(auth,email,password).then((userCredential)=>{
-      console.log('Signed in!')
-      const user =userCredential.user;
-      console.log(user)
-      console.log('test usuario:', usuario)
-      navigation.navigate('Home', {screen: 'Inicio'})
-    }).catch(error=>{
-      console.log(error)
-    })
+
+   const handleSignIn = async() =>{
+   
+   await signInWithEmailAndPassword(auth,email,password)
+   .then((userCredentials)=>{
+      const user =userCredentials.user;
+      console.log('test usuario:', user.email);
+     
+    }).catch(error=> alert(error.message))
   } 
+   
+
+useEffect( ()=>{ 
+  const unsubscribe = onAuthStateChanged(auth,(user=>{
+    if(user){
+      navigation.replace("Home")
+    }
+  }))
+  return  unsubscribe
+}, [])
+
+
+
+
+
 /*    
 const handleSubmit = async (e)=> {
   e.preventDefault();
@@ -64,11 +78,18 @@ const handleSubmit = async (e)=> {
     }}>
   <View >
     <Text style={{fontSize:17, fontWeight:'400', color:'black'}}>E-mail</Text>
-  <TextInput onChangeText={(text) => setEmail(text)} style={styles.input} placeholder="email@example.com"/>
+  <TextInput 
+  value={email} 
+  onChangeText={(text) => setEmail(text)} 
+  style={styles.input} 
+  placeholder="email@example.com"/>
   </View>
   <View>
     <Text style={{fontSize:17, fontWeight:'400', color:'black'}}>password</Text>
-  <TextInput onChangeText={(text) => setPassword(text)} style={styles.input} placeholder="password"/>
+  <TextInput 
+  value={password} 
+  onChangeText={(text) => setPassword(text)} 
+  style={styles.input} placeholder="password"/>
   </View>
   <TouchableOpacity onPress={handleSignIn} style={[styles.button, {backgroundColor: '#00CFEB90'}]}>
                   <Text style={{fontSize: 17, fontWeight: '400', color: 'white'}}>Login</Text>

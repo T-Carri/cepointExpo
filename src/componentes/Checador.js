@@ -2,21 +2,21 @@ import { View, Text } from 'react-native'
 import React, {useState} from 'react'
 import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
-import { app } from '../../firebase-config';
-import {getAuth} from 'firebase/auth'
+import { auth } from '../../firebase-config';
+
 import { getFirestore, doc, getDoc} from "firebase/firestore"
 //import ScanScreen from './Checador/'
 
 export default function Checador() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-/*   const [rol, setUserRol]= React.useState('')
-  const auth = getAuth(app);
+   const [rol, setUserRol]= React.useState('')
+
   const dato= auth.currentUser;
   if (dato!==null){
-    console.log( "uid", dato.uid )
+    console.log( "uid desde checador:", dato.uid )
   }
 
-  React.useEffect(()=>{
+  /* React.useEffect(()=>{
     const querydb=getFirestore();
     const queryDoc = doc(querydb, "users", dato.uid);
     getDoc(queryDoc).then(res => {
