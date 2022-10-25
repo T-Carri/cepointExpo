@@ -1,20 +1,66 @@
 import { View, Text } from 'react-native'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
 import { auth } from '../../firebase-config';
 
-import { getFirestore, doc, getDoc} from "firebase/firestore"
+import { getFirestore, doc, get, query, where, collection, getDocs, onSnapshot} from "firebase/firestore"
 //import ScanScreen from './Checador/'
 
 export default function Checador() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-   const [rol, setUserRol]= React.useState('')
-
+   const [asignacion, setAsignacion]= React.useState([])
+   
   const dato= auth.currentUser;
   if (dato!==null){
     console.log( "uid desde checador:", dato.uid )
   }
+//getDoc
+
+const getPresupuestos =async () => {
+  const querydb=getFirestore();
+  const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
+  await onSnapshot(q, (query)=>{
+    const data=[]
+    query.forEach((doc)=>{
+      data.push(doc.data())
+    })
+
+    setAsignacion(data)
+  }) }
+
+  useEffect(()=>{
+    getPresupuestos()
+
+    
+  },[])
+    
+   
+
+
+console.log("hook: ", asignacion.map((e)=>e.obra));
+
+/*  const getAsignacion =async () => {
+  const querydb=getFirestore();
+  const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
+  await getDocs(q, (query)=>{
+    console.log("datos:",query)
+ 
+    const data=[]
+    query.forEach((doc)=>{
+      data.push(doc.data())
+      console.log("datos:",doc.data())
+    }) 
+
+    setAsignacion(data) 
+  }) } 
+//residenteUid
+
+  useEffect(()=>{
+    getAsignacion()
+    console.log(asignacion)
+  },[])
+     */
 
   /* React.useEffect(()=>{
     const querydb=getFirestore();
@@ -29,7 +75,9 @@ export default function Checador() {
   return (
     <View>
            <Card>
-          <Card.Title>Obra: mex6</Card.Title>
+          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.obra)}</Card.Title>
+          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.presupuesto)}</Card.Title>
+          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.ubicacion)}</Card.Title>
           <Card.Divider />
 
           <Image
@@ -72,6 +120,10 @@ const styles = StyleSheet.create({
     textAlign : "center",
     paddingVertical : 5,
     marginBottom : 10
+  },
+  
+  checador:{
+    fontSize: 30,
   }
   })
 

@@ -29,23 +29,23 @@ auth.signOut()
     ocupado
   }
  */
-/*    useEffect(()=>{
+ useEffect(()=>{
     const querydb=getFirestore();
     const queryDoc = doc(querydb, "users", dato.uid);
     getDoc(queryDoc).then(res => {
       setUsuario(res.data())
       console.log( res.data().rol)
  }    )
-  },[])   */ 
+  },[])   
 
 
   return (
     <View>
        <Card>
-          <Card.Title>SECMA</Card.Title>
+          <Card.Title style={styles.home}>{usuario.empresa}</Card.Title>
           <Card.Divider />
- 
- <Text style={styles.fonts} h2> Come on boy  </Text>
+          <Text style={styles.fonts} h4>Bienvenido  {usuario.nombre} </Text>
+
 
 
 <Button onPress={handleSignOut}>Salir</Button>
@@ -77,6 +77,10 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginTop: 5,
     },
+
+    home:{
+      fontSize: 30,
+    }
     });
   //TODO: ventana lateral con funciones de app segun tu sesion 
   //Bienvenido fulanito
