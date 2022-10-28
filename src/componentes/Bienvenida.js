@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getFirestore, doc, getDoc} from "firebase/firestore";
 export default function Bienvenida() {
   const navigation = useNavigation();
-  const handleSignOut= () => {
+  const handleSignOut= async () => {
 auth.signOut()
 .then(()=> {
   navigation.replace("Login")

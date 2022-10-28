@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
 import { auth } from '../../firebase-config';
-
+import { useNavigation } from '@react-navigation/native';
 import { getFirestore, doc, get, query, where, collection, getDocs, onSnapshot} from "firebase/firestore"
 //import ScanScreen from './Checador/'
 
@@ -16,6 +16,9 @@ export default function Checador() {
     console.log( "uid desde checador:", dato.uid )
   }
 //getDoc
+
+const navigation = useNavigation();
+
 
 const getPresupuestos =async () => {
   const querydb=getFirestore();
@@ -84,7 +87,7 @@ console.log("hook: ", asignacion.map((e)=>e.obra));
           style={{ width: 200, height: 200, marginBottom: 15, marginLeft: 50 }}
           source={require("../../assets/200.png")}
           onPress={()=>(
-            alert('come on')
+            navigation.navigate('scanner')
 
           )}
         />

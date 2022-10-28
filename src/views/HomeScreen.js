@@ -52,7 +52,6 @@ export default function HomeScreen(){
     >
        <Drawer.Screen name="Inicio" component={Bienvenida} />
       {rol.checador?(<Drawer.Screen name="Checador" component={Checador} />):null}
-      
       <Drawer.Screen name="Control de Facturas" component={ControlFacturas} />
       <Drawer.Screen name="Estado de Nomina" component={EstadoNomina} />
       <Drawer.Screen name="TuQR" component={TuQR} />
