@@ -43,36 +43,15 @@ const getPresupuestos =async () => {
 
 console.log("hook: ", asignacion.map((e)=>e.obra));
 
-/*  const getAsignacion =async () => {
-  const querydb=getFirestore();
-  const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
-  await getDocs(q, (query)=>{
-    console.log("datos:",query)
- 
-    const data=[]
-    query.forEach((doc)=>{
-      data.push(doc.data())
-      console.log("datos:",doc.data())
-    }) 
+const  preparandoRegistro1 = {
 
-    setAsignacion(data) 
-  }) } 
-//residenteUid
+  obra,
+  turno, 
+  tipo de registro, 
+  
 
-  useEffect(()=>{
-    getAsignacion()
-    console.log(asignacion)
-  },[])
-     */
 
-  /* React.useEffect(()=>{
-    const querydb=getFirestore();
-    const queryDoc = doc(querydb, "users", dato.uid);
-    getDoc(queryDoc).then(res => {
-      setUserRol(res.data())
-      console.log( res.data().rol)
- }    )
-  },[])  */
+}
     
 
   return (
