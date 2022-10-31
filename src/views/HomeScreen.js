@@ -15,7 +15,7 @@ import ControlFacturas from '../componentes/ControlFacturas';
 import EstadoNomina from '../componentes/EstadoNomina';
 import TuQR from '../componentes/TuQR';
 import Bienvenida from '../componentes/Bienvenida';
-import {CepointProvider} from '../context/AppContext'
+import {AsignacionProvider} from '../context/AsignacionContext'
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
@@ -46,7 +46,7 @@ export default function HomeScreen(){
 
 
     return( 
-      <CepointProvider>
+      <AsignacionProvider>
 
       <Drawer.Navigator
       useLegacyImplementation
@@ -58,7 +58,7 @@ export default function HomeScreen(){
       <Drawer.Screen name="Estado de Nomina" component={EstadoNomina} />
       <Drawer.Screen name="TuQR" component={TuQR} />
     </Drawer.Navigator>
-</CepointProvider>
+</AsignacionProvider>
  
       );
     

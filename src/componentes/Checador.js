@@ -3,15 +3,17 @@ import React, {useState, useContext} from 'react'
 import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import  CepointContext   from '../context/AppContext';
+import  AsignacionContext   from '../context/AsignacionContext';
+import RegistroContext from '../context/RegistroContext';
 export default function Checador() {
-  const {asignacion} = useContext(CepointContext)
+  const {asignacion} = useContext(AsignacionContext)
+const {setTipoAsistencia} = useContext(RegistroContext)
   const [selectedIndex, setSelectedIndex] = useState(0);
   
-
+console.log(asignacion)
    
 
-console.log('asignacion en context', asignacion)
+console.log('TEST VALUE TIPO DE ASISTENCIA', selectedIndex)
 
 const navigation = useNavigation();
 
@@ -47,7 +49,8 @@ const navigation = useNavigation();
             disabledTextStyle={{color : "white"}}
             selectedIndex={ selectedIndex}
             onPress={(value)=> {
-              setSelectedIndex(value)
+              setSelectedIndex(value),
+              setTipoAsistencia(value)
             }}
             containerStyle={{ 
               marginBottom: 20, 

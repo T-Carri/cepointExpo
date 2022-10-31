@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import CepointContext from '../../context/AppContext';
+import RegistroContext from '../../context/RegistroContext';
+import { useNavigation } from '@react-navigation/native';
 export default function Scan() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-     const {setRegistro} = useContext(CepointContext) 
-
-     console.log(registro)
+     const {setUsuarioAsistencia} = useContext(RegistroContext) 
+     const navigation = useNavigation();
+    // console.log(registro)
     useEffect(() => {
       const getBarCodeScannerPermissions = async () => {
         const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -19,7 +20,7 @@ export default function Scan() {
   
     const handleBarCodeScanned = ({ type, data }) => {
       setScanned(true);
-      setRegistro(data)
+      setUsuarioAsistencia(data)
       alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     };
   
@@ -33,10 +34,10 @@ export default function Scan() {
     return (
       <View style={styles.container}>
         <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}g
           style={StyleSheet.absoluteFillObject}
         />
-        {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+        {scanned && <Button title={'Tap'} onPress={() => navigation.navigate('datosRegistroAsistencia')} />}
       </View>
     );
 }
