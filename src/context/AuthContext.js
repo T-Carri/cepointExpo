@@ -5,11 +5,12 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-//import {app} from '../../firebase-config ';
+
 import { auth } from '../../firebase-config';
-import { getFirestore } from 'firebase/firestore/lite';
-import { doc, collection, setDoc, getDoc} from "firebase/firestore"
+
+
 const UserContext = createContext();
+
 export const UserAuth = () => {
   return useContext(UserContext);
 };

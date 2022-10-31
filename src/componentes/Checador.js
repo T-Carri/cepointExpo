@@ -1,65 +1,31 @@
 import { View, Text } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useContext} from 'react'
 import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
-import { auth } from '../../firebase-config';
 import { useNavigation } from '@react-navigation/native';
-import { getFirestore, doc, get, query, where, collection, getDocs, onSnapshot} from "firebase/firestore"
-//import ScanScreen from './Checador/'
-
+import  CepointContext   from '../context/AppContext';
 export default function Checador() {
+  const {asignacion} = useContext(CepointContext)
   const [selectedIndex, setSelectedIndex] = useState(0);
-   const [asignacion, setAsignacion]= React.useState([])
+  
+
    
-  const dato= auth.currentUser;
-  if (dato!==null){
-    console.log( "uid desde checador:", dato.uid )
-  }
-//getDoc
+
+console.log('asignacion en context', asignacion)
 
 const navigation = useNavigation();
 
-
-const getPresupuestos =async () => {
-  const querydb=getFirestore();
-  const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
-  await onSnapshot(q, (query)=>{
-    const data=[]
-    query.forEach((doc)=>{
-      data.push(doc.data())
-    })
-
-    setAsignacion(data)
-  }) }
-
-  useEffect(()=>{
-    getPresupuestos()
-
-    
-  },[])
-    
-   
-
-
-console.log("hook: ", asignacion.map((e)=>e.obra));
-
-const  preparandoRegistro1 = {
-
-  obra,
-  turno, 
-  tipo de registro, 
-  
-
-
-}
     
 
   return (
     <View>
+
+
            <Card>
-          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.obra)}</Card.Title>
+            
+           <Card.Title style={styles.checador}>{asignacion.map((e)=>e.obra)}</Card.Title>
           <Card.Title style={styles.checador}>{asignacion.map((e)=>e.presupuesto)}</Card.Title>
-          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.ubicacion)}</Card.Title>
+          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.ubicacion)}</Card.Title>   
           <Card.Divider />
 
           <Image

@@ -10,7 +10,7 @@ import HomeScreen from './src/views/HomeScreen';
 import Scan from './src/componentes/Checador/scan';
 //import { app } from './firebase-config';
 //import {getAuth} from 'firebase/auth'
-
+import {CepointProvider} from './src/context/AppContext'
 
 
 const Stack = createNativeStackNavigator();
@@ -21,14 +21,16 @@ export default function App() {
   //const usuario = auth.currentUser; 
 
   return (
+      <CepointProvider>
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Login" >
        <Stack.Screen name="Login" component={LoginScreen}/>
        <Stack.Screen name="Home" component={HomeScreen} />
        <Stack.Screen name="scanner" component={Scan} />
-       <Stack.Screen name="scanner" component={Scan} />
+       
     </Stack.Navigator>
   </NavigationContainer>
+  </CepointProvider>
   );
 }
 
