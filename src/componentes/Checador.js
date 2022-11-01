@@ -11,7 +11,7 @@ const {setTipoAsistencia} = useContext(RegistroContext)
   const [selectedIndex, setSelectedIndex] = useState(0);
   
 console.log(asignacion)
-   
+//console.log(asignacion.data()) 
 
 console.log('TEST VALUE TIPO DE ASISTENCIA', selectedIndex)
 

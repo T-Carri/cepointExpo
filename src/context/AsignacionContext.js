@@ -7,7 +7,7 @@ export default AsignacionContext;
  export const AsignacionProvider = ({children}) => {
    const [asignacion, setAsignacion]= useState("test")
    const [currentU, setCurrentU] = useState()
-   
+   const [uidAsignacion, setUidAsignacion ] = useState('')
    const dato= auth.currentUser;
     if (dato!==null){
       console.log( "uid desde checador:", dato.uid )
@@ -19,8 +19,11 @@ export default AsignacionContext;
         const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
         await onSnapshot(q, (query)=>{
           const data=[]
+         
           query.forEach((doc)=>{
             data.push(doc.data())
+            console.log("UIDD", doc.id)
+            setUidAsignacion(doc.id)
           })
       
           setAsignacion(data)
@@ -30,9 +33,9 @@ export default AsignacionContext;
         },[])
             
 
-            
+console.log('desde asignacion context:', uidAsignacion )            
      return (
-<AsignacionContext.Provider value={ {asignacion, currentU}   }>
+<AsignacionContext.Provider value={ {asignacion, currentU, uidAsignacion}   }>
 {children}
 </AsignacionContext.Provider>
 
