@@ -7,13 +7,14 @@ const RegistroContext = createContext()
 export default RegistroContext;
 
 export const RegistroProvider = ({children}) => {
-  const {uidAsignacion} = useContext(AsignacionContext)
+ // const {uidAsignacion} = useContext(AsignacionContext)
   const dato= auth.currentUser;
     
-    const [registro, setRegistro] = useState('')
+    const [registro, setRegistro] = useState([])
     const [usuarioAsistencia, setUsuarioAsistencia] =useState([])
     const [tipoAsistencia, setTipoAsistencia] = useState()
-    const [postReg, setPostReg] = useState()
+    //const [postReg, setPostReg] = useState()
+  
     const querydb=getFirestore();
   
 
@@ -24,12 +25,12 @@ export const RegistroProvider = ({children}) => {
         if(docSnap.exists()) {
           const user = docSnap.data()
            console.log("fetch user",user.toString())
-            //Usuario.push(user)
-            setRegistro(user)
+            Usuario.push(user)
+            
         }else{ 
           console.log("No such document!")
         }
-
+        setRegistro(Usuario)
         
 
       }
@@ -44,11 +45,11 @@ export const RegistroProvider = ({children}) => {
         },[usuarioAsistencia])
   
 
-        console.log('are you undefined?', {postReg})
-        console.log('are you undefined? uidAsignacion:', uidAsignacion)
+       // console.log('are you undefined?', {postReg})
+      //  console.log('are you undefined? uidAsignacion:', uidAsignacion)
 
 
-   
+   /* 
         const putAsistencia = async() =>{
          
           //const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
@@ -60,13 +61,13 @@ export const RegistroProvider = ({children}) => {
             
           )
         }
-
+ */
 
 
 
 
     return (
-        <RegistroContext.Provider value={ { putAsistencia,registro, setRegistro, usuarioAsistencia, setUsuarioAsistencia, tipoAsistencia, setTipoAsistencia, setPostReg, postReg}   }>
+        <RegistroContext.Provider value={ { registro, setRegistro, usuarioAsistencia, setUsuarioAsistencia, tipoAsistencia, setTipoAsistencia}   }>
         {children}
         </RegistroContext.Provider>
   )

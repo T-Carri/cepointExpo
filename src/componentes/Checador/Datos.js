@@ -9,8 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../firebase-config';
 export default function Datos() {
   const navigation = useNavigation();
-    const {usuarioAsistencia, registro, tipoAsistencia, setPostReg, putAsistencia } = useContext(RegistroContext)
-    const {currentU}= useContext(AsignacionContext)
+    const {usuarioAsistencia, registro, tipoAsistencia } = useContext(RegistroContext)
+    const {currentU, putAsistencia , setPostReg}= useContext(AsignacionContext)
 
     const dato= auth.currentUser;
   //calculadora de numero de semana
@@ -19,10 +19,10 @@ var oneJan = new Date(currentdate.getFullYear(),0,1);
 var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
 var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
 
-const nombre = registro.trabajador
+const nombre = registro.map((e)=>e.nombre)
 console.log('name:', nombre)
  const datoAsistencia= {
-  trabajador: nombre ,
+  trabajador:  registro.map((e)=>e.nombre)  ,
   semana: result, 
   tipoAsistencia: tipoAsistencia===0?'Entrada':'Salida',
   turno: 'get it', 

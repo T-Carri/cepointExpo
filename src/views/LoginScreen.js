@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View, ScrollView,TextInput,TouchableOpacity,Button, Alert} from 'react-native';
 import {signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import {auth} from '../../firebase-config'
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+
 import { useNavigation } from '@react-navigation/native';
 //import { UserAuth } from '../context/AuthContext';
 
 export default function LoginScreen(){
+
     const [email, setEmail] = useState('')
     const[password, setPassword]=useState('')
    // const [error, setError] = React.useState('')
