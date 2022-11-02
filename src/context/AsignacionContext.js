@@ -1,6 +1,7 @@
 import React, {createContext, useState, useContext, useEffect} from 'react'
 import { getFirestore, doc, get, query, where, collection, getDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore"
 import { auth } from '../../firebase-config';
+import UserContext from './AuthContext';
 const AsignacionContext = createContext()  
 export default AsignacionContext;
 
@@ -9,16 +10,18 @@ export default AsignacionContext;
    const [currentU, setCurrentU] = useState()
    const [uidAsignacion, setUidAsignacion ] = useState('')
    const [postReg, setPostReg] = useState()
+   const {user} = useContext(UserContext)
+ //  const [usuario, setUsuario] = useState(user.uid)
   // const [actualizado, setActualizado]= useState('')
-   const dato= auth.currentUser;
+  /*  const dato= auth.currentUser;
     if (dato!==null){
       console.log( "uid desde checador:", dato.uid )
        //setCurrentU(dato.uid)
-    }
+    } */
 
     const getPresupuestos =async () => { 
         const querydb=getFirestore();
-        const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
+        const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", user.uid ))
         await onSnapshot(q, (query)=>{
           const data=[]
            //const dataid=[]         
@@ -32,7 +35,7 @@ export default AsignacionContext;
         }) }
         useEffect(()=>{
             getPresupuestos()
-        },[dato.uid])
+        },[user])
             
 
 console.log('desde asignacion context:', uidAsignacion )  

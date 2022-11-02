@@ -10,11 +10,12 @@ import { auth } from '../../firebase-config';
 
 
 const UserContext = createContext();
-
+export default UserContext
+/* 
 export const UserAuth = () => {
   return useContext(UserContext);
 };
-
+ */
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   // const dispatch=useDispatch();

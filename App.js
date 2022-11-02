@@ -13,7 +13,7 @@ import Datos from './src/componentes/Checador/Datos'
 //import {getAuth} from 'firebase/auth'
 import {RegistroProvider} from './src/context/RegistroContext'
 import { AsignacionProvider } from './src/context/AsignacionContext';
-
+import {AuthContextProvider} from './src/context/AuthContext'
 
 const Stack = createNativeStackNavigator();
 
@@ -23,18 +23,21 @@ export default function App() {
   //const usuario = auth.currentUser; 
 
   return (
+    <AuthContextProvider>
     <AsignacionProvider> 
   <RegistroProvider>
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Login" >
-       <Stack.Screen name="Login" component={LoginScreen}/>
-       <Stack.Screen name="Home" component={HomeScreen} />
-       <Stack.Screen name="scanner" component={Scan} />
-       <Stack.Screen name="datosRegistroAsistencia" component={Datos} />
+       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+       <Stack.Screen name="Home" component={HomeScreen}  options={{ headerShown: false }}/>
+       <Stack.Screen name="scanner" component={Scan} options={{ headerShown: false }}/>
+       <Stack.Screen name="datosRegistroAsistencia" component={Datos}  />
     </Stack.Navigator>
   </NavigationContainer>
   </RegistroProvider>
     </AsignacionProvider>
+    
+    </AuthContextProvider>
   );
 }
 

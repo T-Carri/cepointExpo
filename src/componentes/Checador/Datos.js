@@ -7,11 +7,12 @@ import { mdiAccountClock } from '@mdi/js'
 import AsignacionContext from '../../context/AsignacionContext';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../firebase-config';
+import UserContext from '../../context/AuthContext';
 export default function Datos() {
   const navigation = useNavigation();
     const {usuarioAsistencia, registro, tipoAsistencia } = useContext(RegistroContext)
     const {currentU, putAsistencia , setPostReg}= useContext(AsignacionContext)
-
+     const {user} =useContext(UserContext )
     const dato= auth.currentUser;
   //calculadora de numero de semana
     const currentdate = new Date();
@@ -27,7 +28,7 @@ console.log('name:', nombre)
   tipoAsistencia: tipoAsistencia===0?'Entrada':'Salida',
   turno: 'get it', 
   date: Date(),  
-  identidadChecador: dato.uid
+  identidadChecador: user.uid
 }
  
 console.log('datoAsistencia:', datoAsistencia)

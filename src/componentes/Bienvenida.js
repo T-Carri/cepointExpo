@@ -1,12 +1,31 @@
 import { View, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Card, Text, Button } from '@rneui/themed';
 import { auth } from '../../firebase-config';
 import { useNavigation } from '@react-navigation/native';
 import { getFirestore, doc, getDoc} from "firebase/firestore";
+import UserContext from '../context/AuthContext';
 export default function Bienvenida() {
+  const {user, logout}= useContext(UserContext)
   const navigation = useNavigation();
-  const handleSignOut= async () => {
+  const [error, setError] = useState('');
+
+
+  const handleSignOut = async()=>{
+    try{
+      await logout(auth).then(
+        navigation.replace("Login")
+        
+      )
+      console.log('You are logged out')
+    } catch(e) {
+      setError(e.message)
+      console.log(error)
+      throw error;
+    }
+  };
+  
+  /* const handleSignOut= async () => {
 auth.signOut()
 .then(()=> {
   navigation.replace("Login")
@@ -14,7 +33,7 @@ auth.signOut()
 .catch(error=> alert(error.message))
 
   }
-
+ */
   const dato= auth.currentUser;
   if (dato!==null){
     console.log( "email", dato.email )
@@ -31,7 +50,7 @@ auth.signOut()
  */
  useEffect(()=>{
     const querydb=getFirestore();
-    const queryDoc = doc(querydb, "users", dato.uid);
+    const queryDoc = doc(querydb, "users", user.uid);
     getDoc(queryDoc).then(res => {
       setUsuario(res.data())
       console.log( res.data().rol)

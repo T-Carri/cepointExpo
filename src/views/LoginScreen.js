@@ -1,36 +1,41 @@
 import { StyleSheet, Text, View, ScrollView,TextInput,TouchableOpacity,Button, Alert} from 'react-native';
-import {signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+//import {signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import {auth} from '../../firebase-config'
 import React, {useEffect, useState, useContext} from 'react';
-
+import UserContext from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 //import { UserAuth } from '../context/AuthContext';
 
 export default function LoginScreen(){
-
+  const {signIn} = useContext(UserContext)
     const [email, setEmail] = useState('')
     const[password, setPassword]=useState('')
-   // const [error, setError] = React.useState('')
+    const [error, setError] = useState('');
     const navigation = useNavigation();
   
   
    /*  const auth= getAuth(app);  
    const usuario = auth.currentUser; */
    // const {signIn} = UserAuth();  
-
+   const handleSignIn = async (e) => {
+    e.preventDefault();
+    setError('')
+    try {
+      await signIn(email, password)
+      navigation.replace("Home")
+     
+    } catch (e) {
+      setError(e.message)
+      console.log(e.message)
+      throw error;
+    }
+  };
 
   
-    /* const handleCreateAccount = () => {
-    createUserWithEmailAndPassword(auth, email, password).then((userCredential)=>{
-      console.log('Account created!')
-      const user =userCredential.user;
-      console.log(user)}).catch(error=>{
-        console.log(error)
-        Alert.alert(error.message)
-      })
-  } */
 
 
+
+/* 
    const handleSignIn = async() =>{
    
    await signInWithEmailAndPassword(auth,email,password)
@@ -51,7 +56,7 @@ useEffect( ()=>{
   return  unsubscribe
 }, [])
 
-
+ */
 
 
 
