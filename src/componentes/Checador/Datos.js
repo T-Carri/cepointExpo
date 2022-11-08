@@ -43,6 +43,16 @@ const handleClick= ()=>{
  
 }
 
+const handleClickCamara= ()=>{
+  try {
+   
+        navigation.navigate('camara')
+    
+   }    catch (error) {
+    console.log(error)
+  }
+ 
+}
 useEffect(
   ()=>{
     setPostReg(datoAsistencia)
@@ -70,7 +80,9 @@ useEffect(
   <Card.Title>  # {result} semana  </Card.Title>
    <Card.Title style={styles.EoS}>  {tipoAsistencia===0?'Entrada':'Salida'}     </Card.Title>     
 <Card.Title>  {Date()}  </Card.Title>
-<Button onPress={handleClick}>Tomar foto </Button>
+
+<Button onPress={handleClickCamara}>Tomar foto </Button>
+<Button onPress={handleClick}>Registra </Button>
         </Card>
 
     </View>

@@ -9,6 +9,7 @@ import HomeScreen from './src/views/HomeScreen';
 //import ScanScreen from './src/componentes/checador/ScanScreen'
 import Scan from './src/componentes/Checador/scan';
 import Datos from './src/componentes/Checador/Datos'
+import Camara from './src/componentes/Checador/Camara';
 //import { app } from './firebase-config';
 //import {getAuth} from 'firebase/auth'
 import {RegistroProvider} from './src/context/RegistroContext'
@@ -32,6 +33,7 @@ export default function App() {
        <Stack.Screen name="Home" component={HomeScreen}  options={{ headerShown: false }}/>
        <Stack.Screen name="scanner" component={Scan} options={{ headerShown: false }}/>
        <Stack.Screen name="datosRegistroAsistencia" component={Datos}  />
+       <Stack.Screen name="camara" component={Camara}  />
     </Stack.Navigator>
   </NavigationContainer>
   </RegistroProvider>
