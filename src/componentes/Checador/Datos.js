@@ -37,10 +37,11 @@ console.log('Datos Image', image)
 const handleClick= async ()=>{
   try {
    await putAsistencia().then(
+    setImage(null),
      navigation.navigate('Checador')
     ).then(
       await uploadFile(image),
-      setImage(null)
+      
     )
        
       
