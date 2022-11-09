@@ -1,6 +1,7 @@
 import React, {createContext, useState, useContext, useEffect} from 'react'
 import { getFirestore, doc, get, query, where, collection, getDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore"
-import { auth } from '../../firebase-config';
+import {  ref, uploadBytes, uploadString } from "firebase/storage";
+import { auth, storage } from '../../firebase-config';
 import UserContext from './AuthContext';
 const AsignacionContext = createContext()  
 export default AsignacionContext;
@@ -19,6 +20,8 @@ export default AsignacionContext;
        //setCurrentU(dato.uid)
     } */
 
+
+
     const getPresupuestos =async () => { 
         const querydb=getFirestore();
         const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", user.uid ))
@@ -33,6 +36,7 @@ export default AsignacionContext;
           
           setAsignacion(data)
         }) }
+    
         useEffect(()=>{
             getPresupuestos()
         },[user])
@@ -53,8 +57,30 @@ const putAsistencia = async() =>{
   )
 }
 
+/* function uploadFile(file) {
+  const storageRef = ref(storage, 'Asistencias')
+  uploadString(storageRef, file, 'base64url').then((snapshot)=>{
+    console.log('Uploaded a data_url string!')
+  })
+  
+} */
+
+function uploadFile(file) {
+  const storageRef = ref(storage, 'Asistencias')
+  uploadString(storageRef, file, 'data_url').then((snapshot)=>{
+    console.log('Uploaded a data_url string!')
+  })
+  
+}
+
      return (
-<AsignacionContext.Provider value={ {asignacion, currentU, uidAsignacion, putAsistencia, setPostReg}   }>
+<AsignacionContext.Provider value={ {
+  asignacion, 
+  currentU, 
+  uidAsignacion, 
+  putAsistencia, 
+  setPostReg, 
+  uploadFile}   }>
 {children}
 </AsignacionContext.Provider>
 

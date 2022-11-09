@@ -12,7 +12,7 @@ export const RegistroProvider = ({children}) => {
     const [registro, setRegistro] = useState([])
     const [usuarioAsistencia, setUsuarioAsistencia] =useState([])
     const [tipoAsistencia, setTipoAsistencia] = useState()
-
+    const [image, setImage] = useState(null);
   
     const querydb=getFirestore();
   
@@ -36,7 +36,8 @@ export const RegistroProvider = ({children}) => {
 
 
         useEffect(()=>{
-            
+           
+       
  
             fetchUser()
 
@@ -49,7 +50,15 @@ export const RegistroProvider = ({children}) => {
 
 
     return (
-        <RegistroContext.Provider value={ { registro, setRegistro, usuarioAsistencia, setUsuarioAsistencia, tipoAsistencia, setTipoAsistencia}   }>
+        <RegistroContext.Provider value={ 
+          { registro, 
+          setRegistro, 
+          usuarioAsistencia, 
+          setUsuarioAsistencia, 
+          tipoAsistencia, 
+          setTipoAsistencia, 
+          setImage,
+          image}   }>
         {children}
         </RegistroContext.Provider>
   )

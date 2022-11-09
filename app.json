@@ -24,10 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.bryancarrillo.cepoint"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2128e7f3-54fd-438e-b5d4-eaf9e856b15b"
+      }
     }
   }
 }

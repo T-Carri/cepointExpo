@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
-import { Text, View, StyleSheet } from 'react-native';
-import { Card,  Image,  ButtonGroup, Button} from '@rneui/themed';
+import { Text, View, StyleSheet, Image } from 'react-native';
+import { Card, ButtonGroup, Button} from '@rneui/themed';
 import RegistroContext from '../../context/RegistroContext'
 import Icon from '@mdi/react'
 import { mdiAccountClock } from '@mdi/js'
@@ -10,8 +10,8 @@ import { auth } from '../../../firebase-config';
 import UserContext from '../../context/AuthContext';
 export default function Datos() {
   const navigation = useNavigation();
-    const {usuarioAsistencia, registro, tipoAsistencia } = useContext(RegistroContext)
-    const {currentU, putAsistencia , setPostReg}= useContext(AsignacionContext)
+    const {usuarioAsistencia, registro, tipoAsistencia, image, setImage } = useContext(RegistroContext)
+    const {currentU, putAsistencia , setPostReg, uploadFile }= useContext(AsignacionContext)
      const {user} =useContext(UserContext )
     const dato= auth.currentUser;
   //calculadora de numero de semana
@@ -32,11 +32,18 @@ console.log('name:', nombre)
 }
  
 console.log('datoAsistencia:', datoAsistencia)
-const handleClick= ()=>{
+
+console.log('Datos Image', image)
+const handleClick= async ()=>{
   try {
-    putAsistencia().then(
-        navigation.navigate('Checador')
+   await putAsistencia().then(
+     navigation.navigate('Checador')
+    ).then(
+      await uploadFile(image),
+      setImage(null)
     )
+       
+      
    }    catch (error) {
     console.log(error)
   }
@@ -56,14 +63,14 @@ const handleClickCamara= ()=>{
 useEffect(
   ()=>{
     setPostReg(datoAsistencia)
-
+    
   }
   ,[])
 
   
 
   return (
-    <View>
+    <View style={{ flex: 1}}>
         <Card style={styles.card}>
       {/*   <Icon path={mdiAccountClock}
         title="User Profile"
@@ -81,10 +88,22 @@ useEffect(
    <Card.Title style={styles.EoS}>  {tipoAsistencia===0?'Entrada':'Salida'}     </Card.Title>     
 <Card.Title>  {Date()}  </Card.Title>
 
-<Button onPress={handleClickCamara}>Tomar foto </Button>
-<Button onPress={handleClick}>Registra </Button>
-        </Card>
 
+{image?null:<Button onPress={handleClickCamara}>Tomar foto </Button>}
+
+
+<Card style={{ flex: 1}}>
+  {image&&
+      <Button onPress={handleClick}>Registra </Button>}
+
+      <View style={styles.cameraContainer}>
+ 
+
+      </View>
+
+</Card>
+        </Card>
+        {image && <Image source={{uri: image}} style={{flex:1}}/>}
     </View>
         
         
@@ -99,5 +118,9 @@ const styles = StyleSheet.create({
   },
   EoS:{
     fontSize: 30,
-  }
+  },
+  cameraContainer: {
+    flex: 1,
+    flexDirection: 'row'
+},
   });
