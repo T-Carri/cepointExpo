@@ -10,7 +10,7 @@ import { auth } from '../../../firebase-config';
 import UserContext from '../../context/AuthContext';
 export default function Datos() {
   const navigation = useNavigation();
-    const {usuarioAsistencia, registro, tipoAsistencia, image, setImage } = useContext(RegistroContext)
+    const {usuarioAsistencia, registro, tipoAsistencia, image, setImage, activaOcupado, desactivaOcupado } = useContext(RegistroContext)
     const {currentU, putAsistencia , setPostReg, uploadFile }= useContext(AsignacionContext)
      const {user} =useContext(UserContext )
     const dato= auth.currentUser;
@@ -25,7 +25,7 @@ console.log('name:', nombre)
  const datoAsistencia= {
   trabajador:  registro.map((e)=>e.nombre)  ,
   semana: result, 
-  tipoAsistencia: tipoAsistencia===0?'Entrada':'Salida',
+  tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
   turno: 'get it', 
   date: Date(),  
   identidadChecador: user.uid
@@ -40,7 +40,9 @@ const handleClick= async ()=>{
     setImage(null),
      navigation.navigate('Checador')
     ).then(
-      await uploadFile(image),
+identificadorAsistencia(datoAsistencia.tipoAsistencia)
+    ).then(
+      await uploadFile(image)
       
     )
        
@@ -50,6 +52,23 @@ const handleClick= async ()=>{
   }
  
 }
+ 
+console.log('es entrada o salida?:  ',datoAsistencia.tipoAsistencia)
+
+//funcion que identifique si esta registrando una entrada o una checada
+ function identificadorAsistencia(params) {
+  if (params==='Entrada'){
+    activaOcupado()
+    console.log('Ahora ese usuario esta ocupado')
+  } else{
+    desactivaOcupado()
+    console.log('Ahora ese usuario esta desocupado')
+  }
+} 
+
+
+
+
 
 const handleClickCamara= ()=>{
   try {
@@ -73,20 +92,13 @@ useEffect(
   return (
     <View style={{ flex: 1}}>
         <Card style={styles.card}>
-      {/*   <Icon path={mdiAccountClock}
-        title="User Profile"
-        size={1}
-        horizontal
-        vertical
-        rotate={90}
-        color="red"
-        spin/> */}
+  
 <Card.Title>  Estas registrando a:  </Card.Title>
 <Card.Title style={styles.nombre}>  {registro.map((e)=>e.nombre)}  </Card.Title>
 <Card.Title>  {registro.map((e)=>e.empresa)}  </Card.Title>
 <Card.Title>  {registro.map((e)=>e.perfil)}  </Card.Title>
   <Card.Title>  # {result} semana  </Card.Title>
-   <Card.Title style={styles.EoS}>  {tipoAsistencia===0?'Entrada':'Salida'}     </Card.Title>     
+   <Card.Title style={styles.EoS}>  {tipoAsistencia==0?'Entrada':'Salida'}     </Card.Title>     
 <Card.Title>  {Date()}  </Card.Title>
 
 

@@ -11,7 +11,7 @@ export const RegistroProvider = ({children}) => {
     
     const [registro, setRegistro] = useState([])
     const [usuarioAsistencia, setUsuarioAsistencia] =useState([])
-    const [tipoAsistencia, setTipoAsistencia] = useState()
+    const [tipoAsistencia, setTipoAsistencia] = useState(0)
     const [image, setImage] = useState(null);
   
     const querydb=getFirestore();
@@ -34,6 +34,14 @@ export const RegistroProvider = ({children}) => {
 
       }
 
+      const activaOcupado = async ()=> {
+         const ref = doc(querydb, "users", usuarioAsistencia)
+         await updateDoc(ref, {ocupado: true})
+      }
+      const desactivaOcupado = async ()=> {
+        const ref = doc(querydb, "users", usuarioAsistencia)
+        await updateDoc(ref, {ocupado: false})
+     }
 
         useEffect(()=>{
            
@@ -58,7 +66,9 @@ export const RegistroProvider = ({children}) => {
           tipoAsistencia, 
           setTipoAsistencia, 
           setImage,
-          image}   }>
+          image,
+          activaOcupado,
+          desactivaOcupado}   }>
         {children}
         </RegistroContext.Provider>
   )
