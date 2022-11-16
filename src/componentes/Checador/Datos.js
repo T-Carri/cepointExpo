@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, Alert } from 'react-native';
 import { Card, ButtonGroup, Button} from '@rneui/themed';
 import RegistroContext from '../../context/RegistroContext'
 import Icon from '@mdi/react'
@@ -8,11 +8,13 @@ import AsignacionContext from '../../context/AsignacionContext';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../firebase-config';
 import UserContext from '../../context/AuthContext';
+import { useState } from 'react';
 export default function Datos() {
   const navigation = useNavigation();
     const {usuarioAsistencia, registro, tipoAsistencia, image, setImage, activaOcupado, desactivaOcupado } = useContext(RegistroContext)
     const {currentU, putAsistencia , setPostReg, uploadFile }= useContext(AsignacionContext)
      const {user} =useContext(UserContext )
+     const [Ocupado, setOcupado]= useState()
     const dato= auth.currentUser;
   //calculadora de numero de semana
     const currentdate = new Date();
@@ -23,7 +25,7 @@ var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
 const nombre = registro.map((e)=>e.nombre)
 console.log('name:', nombre)
  const datoAsistencia= {
-  trabajador:  registro.map((e)=>e.nombre)  ,
+  trabajador:  registro.map((e)=>e.nombre),
   semana: result, 
   tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
   turno: 'get it', 
@@ -32,6 +34,7 @@ console.log('name:', nombre)
 }
  
 console.log('datoAsistencia:', datoAsistencia)
+console.log('esta ocupado?', registro.map((e)=>e.ocupado))
 
 console.log('Datos Image', image)
 const handleClick= async ()=>{
@@ -40,7 +43,8 @@ const handleClick= async ()=>{
     setImage(null),
      navigation.navigate('Checador')
     ).then(
-identificadorAsistencia(datoAsistencia.tipoAsistencia)
+
+identificadorAsistencia(datoAsistencia.tipoAsistencia, Ocupado) 
     ).then(
       await uploadFile(image)
       
@@ -53,10 +57,12 @@ identificadorAsistencia(datoAsistencia.tipoAsistencia)
  
 }
  
-console.log('es entrada o salida?:  ',datoAsistencia.tipoAsistencia)
 
-//funcion que identifique si esta registrando una entrada o una checada
- function identificadorAsistencia(params) {
+
+
+
+/* console.log('es entrada o salida?:  ',datoAsistencia.tipoAsistencia)
+function identificadorAsistencia(params) {
   if (params==='Entrada'){
     activaOcupado()
     console.log('Ahora ese usuario esta ocupado')
@@ -64,7 +70,43 @@ console.log('es entrada o salida?:  ',datoAsistencia.tipoAsistencia)
     desactivaOcupado()
     console.log('Ahora ese usuario esta desocupado')
   }
-} 
+}  */
+
+//funcion que identifique si esta registrando una entrada o una checada
+ const  identificadorAsistencia=(params, params1)=> {
+  try {
+    if (params==='Entrada'&&params1==false){
+      activaOcupado()
+      console.log('Ahora ese usuario esta ocupado')
+    } else if(params==='Entrada'&&params1==true){
+  Alert.alert(
+    "Usuario Ocupado!",
+    "Verifique con recursos humanos su estado o verifique que necesita registrar Entrada",
+    [{
+      text: "Aceptar", 
+      onPress: ()=> navigation.navigate('Checador'),
+      style: "cancel"
+  
+    }], { cancelable: false}
+    )} else if(params==='Salida'&&params1==true){
+      desactivaOcupado()
+      console.log('Ahora ese usuario esta desocupado')
+    } else if(params==='Salida'&&params1==false){
+      Alert.alert(
+        "Este Usuario no estaba registrado!",
+        "Verifique con recursos humanos su estado o verifique que necesita registrar Salida",
+        [{
+          text: "Aceptar", 
+          onPress: ()=> navigation.navigate('Checador'),
+          style: "cancel"
+      
+        }], { cancelable: false}
+        )
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}  
 
 
 
@@ -83,6 +125,7 @@ const handleClickCamara= ()=>{
 useEffect(
   ()=>{
     setPostReg(datoAsistencia)
+    registro.map((e)=> setOcupado(e.ocupado)) 
     
   }
   ,[])

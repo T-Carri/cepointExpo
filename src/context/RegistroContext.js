@@ -43,6 +43,10 @@ export const RegistroProvider = ({children}) => {
         await updateDoc(ref, {ocupado: false})
      }
 
+/*      const getOcupado = async()=>{
+      const ref = doc(querydb, "users", usuarioAsistencia)
+
+     } */
         useEffect(()=>{
            
        
@@ -50,7 +54,7 @@ export const RegistroProvider = ({children}) => {
             fetchUser()
 
             
-        },[usuarioAsistencia])
+        },[])
   
 
 
