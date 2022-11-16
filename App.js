@@ -15,6 +15,7 @@ import Camara from './src/componentes/Checador/Camara';
 import {RegistroProvider} from './src/context/RegistroContext'
 import { AsignacionProvider } from './src/context/AsignacionContext';
 import {AuthContextProvider} from './src/context/AuthContext'
+import { UsuarioContextProvider } from './src/context/UsuarioContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ export default function App() {
 
   return (
     <AuthContextProvider>
+<UsuarioContextProvider>
     <AsignacionProvider> 
   <RegistroProvider>
     <NavigationContainer>
@@ -38,7 +40,7 @@ export default function App() {
   </NavigationContainer>
   </RegistroProvider>
     </AsignacionProvider>
-    
+    </UsuarioContextProvider>
     </AuthContextProvider>
   );
 }

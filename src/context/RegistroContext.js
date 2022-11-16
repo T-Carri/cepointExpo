@@ -15,15 +15,15 @@ export const RegistroProvider = ({children}) => {
     const [image, setImage] = useState(null);
   
     const querydb=getFirestore();
-  
+    const Usuario = []
 
         const fetchUser = async () => {  
          const ref = doc(querydb, "users", usuarioAsistencia)
          const docSnap = await getDoc(ref)
-         const Usuario = []
+       
         if(docSnap.exists()) {
           const user = docSnap.data()
-           console.log("fetch user",user.toString())
+          // console.log("fetch user",user.toString())
             Usuario.push(user)
             
         }else{ 
@@ -43,10 +43,6 @@ export const RegistroProvider = ({children}) => {
         await updateDoc(ref, {ocupado: false})
      }
 
-/*      const getOcupado = async()=>{
-      const ref = doc(querydb, "users", usuarioAsistencia)
-
-     } */
         useEffect(()=>{
            
        
@@ -54,7 +50,7 @@ export const RegistroProvider = ({children}) => {
             fetchUser()
 
             
-        },[])
+        })
   
 
 

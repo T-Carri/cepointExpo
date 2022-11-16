@@ -5,66 +5,45 @@ import { auth } from '../../firebase-config';
 import { useNavigation } from '@react-navigation/native';
 import { getFirestore, doc, getDoc} from "firebase/firestore";
 import UserContext from '../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UsuarioContext from '../context/UsuarioContext';
 export default function Bienvenida() {
   const {user, logout}= useContext(UserContext)
   const navigation = useNavigation();
   const [error, setError] = useState('');
-
+  const {Usuario} = useContext(UsuarioContext)
 
   const handleSignOut = async()=>{
     try{
       await logout(auth).then(
-        navigation.replace("Login")
+        async()=>{
+         navigation.replace("Login")
+         await AsyncStorage.removeItem('Auth Token')
+         let authToken = await AsyncStorage.getItem('Auth Token')
+         console.log('Token: ', authToken)
+       })
+       console.log('You are logged out')
+     } catch(e) {
+       setError(e.message)
+       console.log(error)
+       throw error;
+     }
+   };
+       
         
-      )
-      console.log('You are logged out')
-    } catch(e) {
-      setError(e.message)
-      console.log(error)
-      throw error;
-    }
-  };
+                  
+                
   
-  /* const handleSignOut= async () => {
-auth.signOut()
-.then(()=> {
-  navigation.replace("Login")
-})
-.catch(error=> alert(error.message))
 
-  }
- */
-  const dato= auth.currentUser;
-  if (dato!==null){
-    console.log( "email", dato.email )
-  }
-
-  const [usuario, setUsuario] = useState('')
-  /* const identidad = { 
-    nombre,
-    perfil,
-    empresa, 
-    activo, 
-    ocupado
-  }
- */
- useEffect(()=>{
-    const querydb=getFirestore();
-    const queryDoc = doc(querydb, "users", user.uid);
-    getDoc(queryDoc).then(res => {
-      setUsuario(res.data())
-      console.log( res.data().rol)
- }    )
-  },[])   
 
 
   return (
     <View>
        <Card>
-          <Card.Title style={styles.home}>{usuario.empresa}</Card.Title>
+          <Card.Title style={styles.home}>{Usuario.empresa}</Card.Title>
           <Card.Divider />
-          <Text style={styles.fonts} h4>Bienvenido  {usuario.nombre} </Text>
-
+          <Text style={styles.fonts} h4>Bienvenido  {Usuario.nombre} </Text>
+ 
 
 
 <Button onPress={handleSignOut}>Salir</Button>

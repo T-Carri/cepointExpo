@@ -13,7 +13,7 @@ const {setTipoAsistencia} = useContext(RegistroContext)
 //console.log(asignacion)
 //console.log(asignacion.data()) 
 
-console.log('TEST VALUE TIPO DE ASISTENCIA', selectedIndex)
+//console.log('TEST VALUE TIPO DE ASISTENCIA', selectedIndex)
 
 const navigation = useNavigation();
 
@@ -79,9 +79,4 @@ const styles = StyleSheet.create({
   })
 
 
-// onPress={} in the image for activate the qr service 
-// such fetch {name} in the qr an then build an interface with 
 
-// name, entrada: Date()
-// name, salida
-// 

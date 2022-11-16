@@ -23,39 +23,41 @@ var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
 var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
 
 const nombre = registro.map((e)=>e.nombre)
-console.log('name:', nombre)
- const datoAsistencia= {
+const ocupado =  registro.map((e)=>e.ocupado).toString()
+const datoAsistencia= {
   trabajador:  registro.map((e)=>e.nombre),
   semana: result, 
   tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
   turno: 'get it', 
+  
   date: Date(),  
   identidadChecador: user.uid
 }
- 
-console.log('datoAsistencia:', datoAsistencia)
-console.log('esta ocupado?', registro.map((e)=>e.ocupado))
 
-console.log('Datos Image', image)
+/* console.log('usuario asistencia:', usuarioAsistencia)
+console.log('ocupado:', ocupado)
+console.log('name:', nombre)
+console.log('datoAsistencia:', datoAsistencia)
+console.log('Datos Image', image) */
+
+
 const handleClick= async ()=>{
   try {
-   await putAsistencia().then(
-    setImage(null),
-     navigation.navigate('Checador')
-    ).then(
-
-identificadorAsistencia(datoAsistencia.tipoAsistencia, Ocupado) 
-    ).then(
-      await uploadFile(image)
-      
-    )
-       
-      
-   }    catch (error) {
-    console.log(error)
-  }
- 
-}
+    identificadorAsistencia(datoAsistencia.tipoAsistencia,ocupado).then(
+      setImage(null),
+       navigation.navigate('Checador')
+      ).then(
+        await uploadFile(image)
+        )
+        
+    }    catch (error) {
+     console.log(error)
+   }
+  
+ }
+         
+        
+    
  
 
 
@@ -73,12 +75,15 @@ function identificadorAsistencia(params) {
 }  */
 
 //funcion que identifique si esta registrando una entrada o una checada
- const  identificadorAsistencia=(params, params1)=> {
-  try {
-    if (params==='Entrada'&&params1==false){
-      activaOcupado()
+  const  identificadorAsistencia= async(params, params1)=> {
+  //console.log('params: ', params, 'params1    ', params1)
+ 
+  
+    if (params==='Entrada'&&params1=='false'){
+  activaOcupado().then( 
+        await putAsistencia())
       console.log('Ahora ese usuario esta ocupado')
-    } else if(params==='Entrada'&&params1==true){
+    } else if(params==='Entrada'&&params1=='true'){
   Alert.alert(
     "Usuario Ocupado!",
     "Verifique con recursos humanos su estado o verifique que necesita registrar Entrada",
@@ -88,10 +93,11 @@ function identificadorAsistencia(params) {
       style: "cancel"
   
     }], { cancelable: false}
-    )} else if(params==='Salida'&&params1==true){
-      desactivaOcupado()
+    )} else if(params=='Salida'&&params1=='true'){
+      desactivaOcupado().then( 
+        await putAsistencia())
       console.log('Ahora ese usuario esta desocupado')
-    } else if(params==='Salida'&&params1==false){
+    } else if(params=='Salida'&&params1=='false'){
       Alert.alert(
         "Este Usuario no estaba registrado!",
         "Verifique con recursos humanos su estado o verifique que necesita registrar Salida",
@@ -102,14 +108,11 @@ function identificadorAsistencia(params) {
       
         }], { cancelable: false}
         )
+    } else{
+      console.log('there a error go and find it')
     }
-  } catch (error) {
-    console.log(error)
-  }
+ 
 }  
-
-
-
 
 
 const handleClickCamara= ()=>{
@@ -125,7 +128,7 @@ const handleClickCamara= ()=>{
 useEffect(
   ()=>{
     setPostReg(datoAsistencia)
-    registro.map((e)=> setOcupado(e.ocupado)) 
+    
     
   }
   ,[])

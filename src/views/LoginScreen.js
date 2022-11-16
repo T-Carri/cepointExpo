@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, ScrollView,TextInput,TouchableOpacity,Button, Alert} from 'react-native';
-//import {signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
-import {auth} from '../../firebase-config'
 import React, {useEffect, useState, useContext} from 'react';
 import UserContext from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-//import { UserAuth } from '../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
 
 export default function LoginScreen(){
   const {signIn} = useContext(UserContext)
@@ -14,15 +15,22 @@ export default function LoginScreen(){
     const navigation = useNavigation();
   
   
-   /*  const auth= getAuth(app);  
-   const usuario = auth.currentUser; */
-   // const {signIn} = UserAuth();  
+ 
    const handleSignIn = async (e) => {
     e.preventDefault();
     setError('')
     try {
-      await signIn(email, password)
-      navigation.replace("Home")
+      await signIn(email, password).then(
+ async (response)=>{
+  navigation.replace("Home")
+  //console.log('response:',response)
+await AsyncStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
+let authToken = await AsyncStorage.getItem('Auth Token')
+console.log('Token: ', authToken)
+}
+        
+      )
+  
      
     } catch (e) {
       setError(e.message)
@@ -31,49 +39,22 @@ export default function LoginScreen(){
     }
   };
 
-  
-
-
-
-/* 
-   const handleSignIn = async() =>{
-   
-   await signInWithEmailAndPassword(auth,email,password)
-   .then((userCredentials)=>{
-      const user =userCredentials.user;
-      console.log('test usuario:', user.email);
-     
-    }).catch(error=> alert(error.message))
-  } 
-   
-
-useEffect( ()=>{ 
-  const unsubscribe = onAuthStateChanged(auth,(user=>{
-    if(user){
+  const testToken = async()=>{
+    let authToken = await AsyncStorage.getItem('Auth Token')
+    //console.log('Token: ', authToken)
+    if (authToken!=null){
       navigation.replace("Home")
     }
-  }))
-  return  unsubscribe
-}, [])
+  
+     
 
- */
-
-
-
-/*    
-const handleSubmit = async (e)=> {
-  e.preventDefault();
-  setError('')
-  try{
-    await signIn(email, password)
-     navigation.navigate('Home')  
-  } catch (e){
-    setError(e.message)
-    console.log(e.message)
   }
+    useEffect( ()=>{
+ testToken()
+    },[]) 
+ 
 
-}
- */
+
   return( 
     <View style={styles.container}> 
     <ScrollView contentContainerStyle={{
