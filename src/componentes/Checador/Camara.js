@@ -9,7 +9,6 @@ export default function App() {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
  
-  const [type, setType] = useState(Camera.Constants.Type.back);
   const {setImage, image}=useContext(RegistroContext)
 useEffect(() => {
     (async () => {
@@ -17,7 +16,8 @@ useEffect(() => {
       setHasCameraPermission(cameraStatus.status === 'granted');
 })();
   }, []);
-const takePicture = async () => {
+
+  const takePicture = async () => {
     if(camera){
         const data = await camera.takePictureAsync()
         setImage(data.uri);
@@ -28,16 +28,17 @@ const takePicture = async () => {
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
+  
   return (
    <View style={{ flex: 1}}>
 
 <View style={styles.container}>
-      <Camera style={styles.camera} ref={ref => setCamera(ref)} type={type}>
+      <Camera style={styles.camera} ref={ref => setCamera(ref)} >
         <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => {
         try {
           takePicture()
-          
+         
         } catch (error) {
           console.log(error)
         }}
@@ -48,52 +49,25 @@ const takePicture = async () => {
       </Camera>
     </View>
 
-     {/*  <View style={styles.cameraContainer}>
-            <Camera 
-            ref={ref => setCamera(ref)}
-            style={styles.fixedRatio} 
-            type={type}
-            ratio={'1:1'} >
-              <View style={styles.buttonContainer}>
-             <TouchableOpacity style={styles.button} onPress={() => {
-        try {
-          takePicture()
-          
-        } catch (error) {
-          console.log(error)
-        }}
-        
-      }>
-            <Text style={styles.text}>Tomar foto</Text>
-             </TouchableOpacity>
-            </View>  </Camera>
-      </View>
- */}
-      {/* <Button title="Take Picture" onPress={() => {
-        try {
-          takePicture()
-          
-        } catch (error) {
-          console.log(error)
-        }}
-        
-      } /> */}
 
 
       
       {image && <Image source={{uri: image}} style={{flex:1}}/>}  
-      <Button title="Enviar" onPress={()=>(navigation.navigate('datosRegistroAsistencia'))}></Button>
-      <Button
-            title="Flip Image"
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-        </Button>
-      {image && <Image source={{uri: image}} style={{flex:1}}/>}  
+      
+      {image&&
+    
+    <View style={styles.buttonContainer1}>
+    <TouchableOpacity 
+    style={styles.button1} 
+    onPress={()=>(navigation.navigate('datosRegistroAsistencia'))} />
+    </View>
+       }
+        
+
+     
+   
+      
+    
    </View>
   );
 }
@@ -112,11 +86,14 @@ const styles = StyleSheet.create({
   fixedRatio:{
       flex: 1,
       aspectRatio: 1
-  },  buttonContainer: {
+  },  
+  buttonContainer: {
     flex: 1,
     flexDirection: 'row',
+    
     backgroundColor: 'transparent',
     margin: 64,
+   
   },
   button: {
     flex: 1,
@@ -127,6 +104,24 @@ const styles = StyleSheet.create({
       bottom: 0,
       borderRadius: 50,
       backgroundColor: '#fff'
+      
+  },
+   
+  buttonContainer1: {
+  
+    flexDirection: 'row',
+    backgroundColor: '#081109'
+   
+  },
+  button1: {
+    flex: 1,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+      width: 70,
+      height: 70,
+      bottom: 0,
+      borderRadius: 50,
+      backgroundColor: '#1BD120'
       
   },
   text: {

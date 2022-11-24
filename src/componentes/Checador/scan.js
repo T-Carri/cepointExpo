@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
+import { Button, Overlay } from '@rneui/themed';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import RegistroContext from '../../context/RegistroContext';
 import { useNavigation } from '@react-navigation/native';
 export default function Scan() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-     const {setUsuarioAsistencia} = useContext(RegistroContext) 
+    const [isLoanding, setIsLoanding]= useState(false);
+     const {setUsuarioAsistencia, fetchUser, registro} = useContext(RegistroContext) 
      const navigation = useNavigation();
+   
+     const [visible, setVisible] = useState(false);
+
+const toggleOverlay = () => {
+  setVisible(!visible);
+};
     // console.log(registro)
     useEffect(() => {
       const getBarCodeScannerPermissions = async () => {
@@ -21,7 +29,12 @@ export default function Scan() {
     const handleBarCodeScanned = ({ type, data }) => {
       setScanned(true);
       setUsuarioAsistencia(data)
-      alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+      fetchUser(data)
+      // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+      if(data!=null){
+setIsLoanding(false )
+      }
+      
     };
   
     if (hasPermission === null) {
@@ -37,7 +50,29 @@ export default function Scan() {
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}g
           style={StyleSheet.absoluteFillObject}
         />
-        {scanned && <Button title={'Tap'} onPress={() => navigation.navigate('datosRegistroAsistencia')} />}
+        {scanned && 
+        
+        <Overlay /* isVisible={visible} */ onBackdropPress={toggleOverlay}>
+        <Text style={styles.textPrimary}>Hello!</Text>
+        <Text style={styles.textSecondary}>
+          Welcome to React Native Elements
+        </Text>
+        <Button
+          icon={
+            <Icon
+              name="wrench"
+              type="font-awesome"
+              color="white"
+              size={25}
+              iconStyle={{ marginRight: 10 }}
+            />
+          }
+          title="Start Building"
+          onPress={toggleOverlay}
+        />
+      </Overlay>
+        
+       }
       </View>
     );
 }
@@ -47,4 +82,8 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       justifyContent: 'center',
     },
+    button:{
+
+
+    }
   });

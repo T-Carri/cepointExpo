@@ -34,11 +34,11 @@ const datoAsistencia= {
   identidadChecador: user.uid
 }
 
-/* console.log('usuario asistencia:', usuarioAsistencia)
+ console.log('usuario asistencia:', usuarioAsistencia)
 console.log('ocupado:', ocupado)
 console.log('name:', nombre)
 console.log('datoAsistencia:', datoAsistencia)
-console.log('Datos Image', image) */
+console.log('Datos Image', image)
 
 
 const handleClick= async ()=>{
@@ -63,16 +63,7 @@ const handleClick= async ()=>{
 
 
 
-/* console.log('es entrada o salida?:  ',datoAsistencia.tipoAsistencia)
-function identificadorAsistencia(params) {
-  if (params==='Entrada'){
-    activaOcupado()
-    console.log('Ahora ese usuario esta ocupado')
-  } else{
-    desactivaOcupado()
-    console.log('Ahora ese usuario esta desocupado')
-  }
-}  */
+
 
 //funcion que identifique si esta registrando una entrada o una checada
   const  identificadorAsistencia= async(params, params1)=> {
@@ -125,6 +116,7 @@ const handleClickCamara= ()=>{
   }
  
 }
+
 useEffect(
   ()=>{
     setPostReg(datoAsistencia)
@@ -143,6 +135,7 @@ useEffect(
 <Card.Title style={styles.nombre}>  {registro.map((e)=>e.nombre)}  </Card.Title>
 <Card.Title>  {registro.map((e)=>e.empresa)}  </Card.Title>
 <Card.Title>  {registro.map((e)=>e.perfil)}  </Card.Title>
+<Card.Title>  {registro.map((e)=>e.ocupado)}  </Card.Title>
   <Card.Title>  # {result} semana  </Card.Title>
    <Card.Title style={styles.EoS}>  {tipoAsistencia==0?'Entrada':'Salida'}     </Card.Title>     
 <Card.Title>  {Date()}  </Card.Title>

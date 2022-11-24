@@ -47,9 +47,11 @@ export default function HomeScreen(){
        <Drawer.Screen name="Inicio" component={Bienvenida} options={{ title: 'Inicio',  headerStyle: {
             backgroundColor: '#EED317',
           }}} />
-      {Usuario.checador&&<Drawer.Screen name="Checador" component={Checador} options={{   headerStyle: {
-            backgroundColor: '#EED317',
+      {Usuario.checador&&<Drawer.Screen name="Checador" component={Checador} options={{  title: 'Checador v3',  headerStyle: {
+            backgroundColor: '#EED317'
+           
           }}} />} 
+
       <Drawer.Screen name="Control de Facturas" component={ControlFacturas}  options={{   headerStyle: {
             backgroundColor: '#EED317',
           }}}/>

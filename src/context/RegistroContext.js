@@ -13,12 +13,13 @@ export const RegistroProvider = ({children}) => {
     const [usuarioAsistencia, setUsuarioAsistencia] =useState([])
     const [tipoAsistencia, setTipoAsistencia] = useState(0)
     const [image, setImage] = useState(null);
+    const [alborotador, setAlborotador]= useState(false)
   
     const querydb=getFirestore();
     const Usuario = []
 
-        const fetchUser = async () => {  
-         const ref = doc(querydb, "users", usuarioAsistencia)
+        const fetchUser = async (data) => {  
+         const ref = doc(querydb, "users", data)
          const docSnap = await getDoc(ref)
        
         if(docSnap.exists()) {
@@ -29,8 +30,8 @@ export const RegistroProvider = ({children}) => {
         }else{ 
           console.log("No such document!")
         }
+       
         setRegistro(Usuario)
-        
 
       }
 
@@ -43,16 +44,29 @@ export const RegistroProvider = ({children}) => {
         await updateDoc(ref, {ocupado: false})
      }
 
-        useEffect(()=>{
-           
-       
- 
-            fetchUser()
+    /*  useEffect(()=>{
+               fetchUser()
+     },[registro])
 
+       */
+     
+   /*   useEffect(()=>{
+           ()=> {}
+          console.log('MONTAJE: ', registro)
+          return ()=> {console.log('CLEANER: ', registro)}
+        }, [registro]) */
+          
+ /*       
+ useEffect(()=>{
+activaOcupado()
+return()=> activaOcupado()
+ },[usuarioAsistencia] )
             
-        })
-  
-
+ useEffect(()=>{
+  desactivaOcupado()
+  return()=> desactivaOcupado()
+   },[usuarioAsistencia] )
+ */
 
 
 
@@ -68,7 +82,8 @@ export const RegistroProvider = ({children}) => {
           setImage,
           image,
           activaOcupado,
-          desactivaOcupado}   }>
+          desactivaOcupado, 
+          fetchUser}   }>
         {children}
         </RegistroContext.Provider>
   )
