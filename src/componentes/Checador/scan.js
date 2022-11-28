@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { Button, Overlay } from '@rneui/themed';
+import { Button, Overlay, Icon } from '@rneui/themed';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import RegistroContext from '../../context/RegistroContext';
 import { useNavigation } from '@react-navigation/native';
@@ -8,7 +8,14 @@ export default function Scan() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [isLoanding, setIsLoanding]= useState(false);
-     const {setUsuarioAsistencia, fetchUser, registro} = useContext(RegistroContext) 
+     const {
+       setUsuarioAsistencia,
+       fetchUser, 
+       registro, 
+       tipoAsistencia,
+       semana, 
+       fetchSemana
+      } = useContext(RegistroContext) 
      const navigation = useNavigation();
    
      const [visible, setVisible] = useState(false);
@@ -26,13 +33,15 @@ const toggleOverlay = () => {
       getBarCodeScannerPermissions();
     }, []);
   
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ type, data }) => {
       setScanned(true);
-      setUsuarioAsistencia(data)
+     await setUsuarioAsistencia(data)
       fetchUser(data)
+      
       // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
       if(data!=null){
-setIsLoanding(false )
+   await setVisible(true)
+    await  fetchSemana()
       }
       
     };
@@ -52,23 +61,41 @@ setIsLoanding(false )
         />
         {scanned && 
         
-        <Overlay /* isVisible={visible} */ onBackdropPress={toggleOverlay}>
-        <Text style={styles.textPrimary}>Hello!</Text>
+        <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+        <Text style={styles.textPrimary}>{registro.map((e)=>e.nombre)} </Text>
         <Text style={styles.textSecondary}>
-          Welcome to React Native Elements
+        {registro.map((e)=>e.empresa)}
+        </Text>
+        <Text style={styles.textSecondary}>
+        {registro.map((e)=>e.perfil)}
+        </Text>
+        <Text style={styles.textSecondary}>
+          {semana}
+        </Text>
+        <Text style={styles.textSecondary}>
+        {tipoAsistencia==0?'Entrada':'Salida'} 
+        </Text>
+        <Text style={styles.textSecondary}>
+        {Date()}
         </Text>
         <Button
           icon={
             <Icon
-              name="wrench"
+              name="camera"
               type="font-awesome"
               color="white"
               size={25}
               iconStyle={{ marginRight: 10 }}
             />
           }
-          title="Start Building"
-          onPress={toggleOverlay}
+          title="Tomar foto"
+          onPress={()=>{
+            try {
+              navigation.navigate('camara')
+              toggleOverlay()
+            } catch (error) {
+              console.log(error)
+            }}}
         />
       </Overlay>
         
@@ -82,8 +109,14 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       justifyContent: 'center',
     },
-    button:{
-
-
+    textPrimary: {
+      marginVertical: 20,
+      textAlign: 'center',
+      fontSize: 20,
+    },
+    textSecondary: {
+      marginBottom: 10,
+      textAlign: 'center',
+      fontSize: 17,
     }
   });

@@ -11,28 +11,33 @@ import UserContext from '../../context/AuthContext';
 import { useState } from 'react';
 export default function Datos() {
   const navigation = useNavigation();
-    const {usuarioAsistencia, registro, tipoAsistencia, image, setImage, activaOcupado, desactivaOcupado } = useContext(RegistroContext)
+    const {usuarioAsistencia,
+      registro, 
+      tipoAsistencia, 
+      image, 
+      setImage, 
+      activaOcupado,
+      desactivaOcupado,
+      semana  
+    } = useContext(RegistroContext)
     const {currentU, putAsistencia , setPostReg, uploadFile }= useContext(AsignacionContext)
      const {user} =useContext(UserContext )
      const [Ocupado, setOcupado]= useState()
     const dato= auth.currentUser;
   //calculadora de numero de semana
-    const currentdate = new Date();
-var oneJan = new Date(currentdate.getFullYear(),0,1);
-var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
-var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
+
 
 const nombre = registro.map((e)=>e.nombre)
 const ocupado =  registro.map((e)=>e.ocupado).toString()
 const datoAsistencia= {
   trabajador:  registro.map((e)=>e.nombre),
-  semana: result, 
+  semana: semana, 
   tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
   turno: 'get it', 
-  
   date: Date(),  
   identidadChecador: user.uid
 }
+  
 
  console.log('usuario asistencia:', usuarioAsistencia)
 console.log('ocupado:', ocupado)
@@ -136,7 +141,7 @@ useEffect(
 <Card.Title>  {registro.map((e)=>e.empresa)}  </Card.Title>
 <Card.Title>  {registro.map((e)=>e.perfil)}  </Card.Title>
 <Card.Title>  {registro.map((e)=>e.ocupado)}  </Card.Title>
-  <Card.Title>  # {result} semana  </Card.Title>
+  <Card.Title>  # {semana} semana  </Card.Title>
    <Card.Title style={styles.EoS}>  {tipoAsistencia==0?'Entrada':'Salida'}     </Card.Title>     
 <Card.Title>  {Date()}  </Card.Title>
 

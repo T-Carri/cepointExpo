@@ -67,8 +67,14 @@ return()=> activaOcupado()
   return()=> desactivaOcupado()
    },[usuarioAsistencia] )
  */
-
-
+const[semana, setSemana] =useState()
+const fetchSemana =()=>{
+  const currentdate = new Date();
+  var oneJan = new Date(currentdate.getFullYear(),0,1);
+  var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
+  var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
+    setSemana(result)
+}
 
 
     return (
@@ -83,7 +89,9 @@ return()=> activaOcupado()
           image,
           activaOcupado,
           desactivaOcupado, 
-          fetchUser}   }>
+          fetchUser,
+          fetchSemana, 
+          semana}   }>
         {children}
         </RegistroContext.Provider>
   )
