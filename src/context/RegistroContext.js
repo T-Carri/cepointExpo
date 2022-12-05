@@ -13,8 +13,7 @@ export const RegistroProvider = ({children}) => {
     const [usuarioAsistencia, setUsuarioAsistencia] =useState([])
     const [tipoAsistencia, setTipoAsistencia] = useState(0)
     const [image, setImage] = useState(null);
-    const [alborotador, setAlborotador]= useState(false)
-  
+    const[semana, setSemana] =React.useState()
     const querydb=getFirestore();
     const Usuario = []
 
@@ -67,15 +66,32 @@ return()=> activaOcupado()
   return()=> desactivaOcupado()
    },[usuarioAsistencia] )
  */
-const[semana, setSemana] =useState()
-const fetchSemana =()=>{
-  const currentdate = new Date();
-  var oneJan = new Date(currentdate.getFullYear(),0,1);
-  var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
-  var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
-    setSemana(result)
-}
-
+   useEffect(
+    ()=>{
+    
+      setSemana(numeroDeSemana(new Date()))
+  
+    },[])
+  
+    const numeroDeSemana = fecha => {
+      const DIA_EN_MILISEGUNDOS = 1000 * 60 * 60 * 24,
+          DIAS_QUE_TIENE_UNA_SEMANA = 7,
+          JUEVES = 4;
+      fecha = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
+      let diaDeLaSemana = fecha.getUTCDay(); // Domingo es 0, sábado es 6
+      if (diaDeLaSemana === 0) {
+          diaDeLaSemana = 7;
+      }
+      fecha.setUTCDate(fecha.getUTCDate() - diaDeLaSemana + JUEVES);
+      const inicioDelAño = new Date(Date.UTC(fecha.getUTCFullYear(), 0, 1));
+      const diferenciaDeFechasEnMilisegundos = fecha - inicioDelAño;
+      return Math.ceil(((diferenciaDeFechasEnMilisegundos / DIA_EN_MILISEGUNDOS) + 1) / DIAS_QUE_TIENE_UNA_SEMANA);
+  
+     
+  };
+  
+  const numeroDeSemanaActual = numeroDeSemana(new Date());
+  
 
     return (
         <RegistroContext.Provider value={ 
@@ -89,8 +105,7 @@ const fetchSemana =()=>{
           image,
           activaOcupado,
           desactivaOcupado, 
-          fetchUser,
-          fetchSemana, 
+          fetchUser, 
           semana}   }>
         {children}
         </RegistroContext.Provider>

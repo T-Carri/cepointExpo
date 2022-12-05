@@ -14,7 +14,7 @@ export default function Scan() {
        registro, 
        tipoAsistencia,
        semana, 
-       fetchSemana
+       
       } = useContext(RegistroContext) 
      const navigation = useNavigation();
    
@@ -41,7 +41,7 @@ const toggleOverlay = () => {
       // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
       if(data!=null){
    await setVisible(true)
-    await  fetchSemana()
+  
       }
       
     };

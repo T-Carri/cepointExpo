@@ -29,8 +29,11 @@ export default function Datos() {
 
 const nombre = registro.map((e)=>e.nombre)
 const ocupado =  registro.map((e)=>e.ocupado).toString()
+
+
+
 const datoAsistencia= {
-  trabajador:  registro.map((e)=>e.nombre),
+  trabajador:  registro.map((e)=>e.nombre).toString(),
   semana: semana, 
   tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
   turno: 'get it', 
