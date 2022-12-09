@@ -3,6 +3,7 @@ import { getFirestore, doc, get, query, where, collection, getDoc, onSnapshot, u
 import {  ref, uploadBytes, uploadString } from "firebase/storage";
 import { auth, storage } from '../../firebase-config';
 import UserContext from './AuthContext';
+import RegistroContext from './RegistroContext';
 const AsignacionContext = createContext()  
 export default AsignacionContext;
 
@@ -12,6 +13,7 @@ export default AsignacionContext;
    const [uidAsignacion, setUidAsignacion ] = useState('')
    const [postReg, setPostReg] = useState()
    const {user} = useContext(UserContext)
+   //const {registro}=useContext(RegistroContext)
  //  const [usuario, setUsuario] = useState(user.uid)
   // const [actualizado, setActualizado]= useState('')
   /*  const dato= auth.currentUser;
@@ -65,13 +67,6 @@ const putAsistencia = async() =>{
   
 } */
 
-function uploadFile(file) {
-  const storageRef = ref(storage, 'Asistencias')
-  uploadString(storageRef, file, 'data_url').then((snapshot)=>{
-    console.log('Uploaded a data_url string!')
-  })
-  
-}
 
      return (
 <AsignacionContext.Provider value={ {
@@ -80,7 +75,7 @@ function uploadFile(file) {
   uidAsignacion, 
   putAsistencia, 
   setPostReg, 
-  uploadFile}   }>
+  }   }>
 {children}
 </AsignacionContext.Provider>
 

@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../firebase-config';
 import UserContext from '../../context/AuthContext';
 import { useState } from 'react';
+import { storage } from '../../../firebase-config';
+import {  ref, uploadBytes, uploadString } from "firebase/storage"
 export default function Datos() {
   const navigation = useNavigation();
     const {usuarioAsistencia,
@@ -20,7 +22,7 @@ export default function Datos() {
       desactivaOcupado,
       semana  
     } = useContext(RegistroContext)
-    const {currentU, putAsistencia , setPostReg, uploadFile }= useContext(AsignacionContext)
+    const {currentU, putAsistencia , setPostReg, asignacion }= useContext(AsignacionContext)
      const {user} =useContext(UserContext )
      const [Ocupado, setOcupado]= useState()
     const dato= auth.currentUser;
@@ -29,8 +31,29 @@ export default function Datos() {
 
 const nombre = registro.map((e)=>e.nombre)
 const ocupado =  registro.map((e)=>e.ocupado).toString()
+const presupuesto = asignacion.map((e)=>e.presupuesto)
+const date = Date.now()
+/* const nombre = registro.map((e)=>e.nombre)
 
+ */
 
+async function uploadFile(file) {
+const blob = await new Promise((resolve, reject)=>{
+  const xhr = new XMLHttpRequest()
+xhr.onload= function (){
+  resolve(xhr.response);
+};
+xhr.responseType ="blob";
+xhr.open("GET", file, true);
+xhr.send(null) 
+})
+
+  const storageRef = ref(storage, `Asistencias/${presupuesto}/${nombre}/${date}`)
+  uploadBytes(storageRef, blob).then((snapshot)=>{
+    console.log('Uploaded a data_url string!')
+  })
+  
+}
 
 const datoAsistencia= {
   trabajador:  registro.map((e)=>e.nombre).toString(),
@@ -55,7 +78,7 @@ const handleClick= async ()=>{
       setImage(null),
        navigation.navigate('Checador')
       ).then(
-        await uploadFile(image)
+      uploadFile(image)
         )
         
     }    catch (error) {

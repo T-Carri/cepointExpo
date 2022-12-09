@@ -27,8 +27,8 @@ export default function App() {
   return (
     <AuthContextProvider>
 <UsuarioContextProvider>
-    <AsignacionProvider> 
   <RegistroProvider>
+    <AsignacionProvider> 
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Login" >
        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
@@ -38,8 +38,8 @@ export default function App() {
        <Stack.Screen name="camara" component={Camara}  />
     </Stack.Navigator>
   </NavigationContainer>
-  </RegistroProvider>
     </AsignacionProvider>
+  </RegistroProvider>
     </UsuarioContextProvider>
     </AuthContextProvider>
   );
