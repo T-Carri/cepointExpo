@@ -22,7 +22,7 @@ export default function Datos() {
       desactivaOcupado,
       semana  
     } = useContext(RegistroContext)
-    const {currentU, putAsistencia , setPostReg, asignacion }= useContext(AsignacionContext)
+    const {currentU, putAsistencia , setPostReg, asignacion, postReg }= useContext(AsignacionContext)
      const {user} =useContext(UserContext )
      const [Ocupado, setOcupado]= useState()
     const dato= auth.currentUser;
@@ -32,7 +32,9 @@ export default function Datos() {
 const nombre = registro.map((e)=>e.nombre)
 const ocupado =  registro.map((e)=>e.ocupado).toString()
 const presupuesto = asignacion.map((e)=>e.presupuesto)
-const date = Date.now()
+//const date = datoAsistencia.clave&&datoAsistencia.clave
+
+//console.log('POSTREG: ', postReg)
 /* const nombre = registro.map((e)=>e.nombre)
 
  */
@@ -48,7 +50,7 @@ xhr.open("GET", file, true);
 xhr.send(null) 
 })
 
-  const storageRef = ref(storage, `Asistencias/${presupuesto}/${nombre}/${date}`)
+  const storageRef = ref(storage, `Asistencias/${presupuesto}/${nombre}/${postReg.clave}`)
   uploadBytes(storageRef, blob).then((snapshot)=>{
     console.log('Uploaded a data_url string!')
   })
@@ -59,18 +61,19 @@ const datoAsistencia= {
   trabajador:  registro.map((e)=>e.nombre).toString(),
   semana: semana, 
   tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
-  turno: 'get it', 
+  clave: Date.now(),
   date: Date(),  
+
   identidadChecador: user.uid
 }
   
 
- console.log('usuario asistencia:', usuarioAsistencia)
+/*  console.log('usuario asistencia:', usuarioAsistencia)
 console.log('ocupado:', ocupado)
 console.log('name:', nombre)
 console.log('datoAsistencia:', datoAsistencia)
 console.log('Datos Image', image)
-
+ */
 
 const handleClick= async ()=>{
   try {
@@ -106,30 +109,19 @@ const handleClick= async ()=>{
         await putAsistencia())
       console.log('Ahora ese usuario esta ocupado')
     } else if(params==='Entrada'&&params1=='true'){
-  Alert.alert(
-    "Usuario Ocupado!",
-    "Verifique con recursos humanos su estado o verifique que necesita registrar Entrada",
-    [{
-      text: "Aceptar", 
-      onPress: ()=> navigation.navigate('Checador'),
-      style: "cancel"
-  
-    }], { cancelable: false}
-    )} else if(params=='Salida'&&params1=='true'){
+         
+      activaOcupado().then( 
+        await putAsistencia())
+      console.log('Ahora ese usuario esta ocupado')
+
+    } else if(params=='Salida'&&params1=='true'){
       desactivaOcupado().then( 
         await putAsistencia())
       console.log('Ahora ese usuario esta desocupado')
     } else if(params=='Salida'&&params1=='false'){
-      Alert.alert(
-        "Este Usuario no estaba registrado!",
-        "Verifique con recursos humanos su estado o verifique que necesita registrar Salida",
-        [{
-          text: "Aceptar", 
-          onPress: ()=> navigation.navigate('Checador'),
-          style: "cancel"
-      
-        }], { cancelable: false}
-        )
+      desactivaOcupado().then( 
+        await putAsistencia())
+      console.log('Ahora ese usuario esta desocupado')
     } else{
       console.log('there a error go and find it')
     }

@@ -75,6 +75,7 @@ const putAsistencia = async() =>{
   uidAsignacion, 
   putAsistencia, 
   setPostReg, 
+  postReg
   }   }>
 {children}
 </AsignacionContext.Provider>
