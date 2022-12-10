@@ -63,7 +63,7 @@ const datoAsistencia= {
   tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
   clave: Date.now(),
   date: Date(),  
-
+  presupuesto: asignacion.map((e)=>e.presupuesto).toString(),
   identidadChecador: user.uid
 }
   
