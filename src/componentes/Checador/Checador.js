@@ -3,8 +3,10 @@ import React, {useState, useContext} from 'react'
 import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import  AsignacionContext   from '../context/AsignacionContext';
-import RegistroContext from '../context/RegistroContext';
+import  AsignacionContext   from '../../context/AsignacionContext';
+
+
+import RegistroContext from '../../context/RegistroContext';
 export default function Checador() {
   const {asignacion} = useContext(AsignacionContext)
 const {setTipoAsistencia} = useContext(RegistroContext)
@@ -32,7 +34,7 @@ const navigation = useNavigation();
 
           <Image
           style={{ width: 200, height: 200, marginBottom: 15, marginLeft: 50 }}
-          source={require("../../assets/200.png")}
+          source={require("../../../assets/200.png")}
           onPress={()=>(
             navigation.navigate('scanner')
 

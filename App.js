@@ -16,7 +16,7 @@ import {RegistroProvider} from './src/context/RegistroContext'
 import { AsignacionProvider } from './src/context/AsignacionContext';
 import {AuthContextProvider} from './src/context/AuthContext'
 import { UsuarioContextProvider } from './src/context/UsuarioContext';
-
+import { CepointContextProvider } from './src/context/CepointContext';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -26,6 +26,7 @@ export default function App() {
 
   return (
     <AuthContextProvider>
+    <CepointContextProvider>
 <UsuarioContextProvider>
   <RegistroProvider>
     <AsignacionProvider> 
@@ -41,6 +42,7 @@ export default function App() {
     </AsignacionProvider>
   </RegistroProvider>
     </UsuarioContextProvider>
+    </CepointContextProvider>
     </AuthContextProvider>
   );
 }

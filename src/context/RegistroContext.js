@@ -46,7 +46,6 @@ export const RegistroProvider = ({children}) => {
     /*  useEffect(()=>{
                fetchUser()
      },[registro])
-
        */
      
    /*   useEffect(()=>{

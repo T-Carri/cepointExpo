@@ -18,8 +18,12 @@ useEffect(() => {
   }, []);
 
   const takePicture = async () => {
+let options={
+  quality:0.3
+}
+
     if(camera){
-        const data = await camera.takePictureAsync()
+        const data = await camera.takePictureAsync(options)
         setImage(data.uri);
         console.log('DATA PIC',data)
     }
@@ -33,7 +37,7 @@ useEffect(() => {
    <View style={{ flex: 1}}>
 
 <View style={styles.container}>
-      <Camera style={styles.camera} ref={ref => setCamera(ref)} >
+      <Camera style={styles.camera} ref={ref => setCamera(ref)}    >
         <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => {
         try {

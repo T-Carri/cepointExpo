@@ -7,14 +7,14 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import React, {useContext} from 'react'
-import Checador from '../componentes/Checador';
-import ControlFacturas from '../componentes/ControlFacturas';
-import EstadoNomina from '../componentes/EstadoNomina';
-import TuQR from '../componentes/TuQR';
+import Checador from '../componentes/Checador/Checador';
+import ControlFacturas from '../componentes/ControlFacturas/ControlFacturas';
+import EstadoNomina from '../componentes/EstadoNomina/EstadoNomina';
+import TuQR from '../componentes/TuQR/TuQR';
 import Bienvenida from '../componentes/Bienvenida';
-import { useNavigation } from '@react-navigation/native';
-import UsuarioContext from '../context/UsuarioContext';
+//import { useNavigation } from '@react-navigation/native';
 
+import CepointContext from '../context/CepointContext';
 
 function CustomDrawerContent(props) {
   return (
@@ -28,9 +28,10 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 export default function HomeScreen(){
-  const navigation = useNavigation();
-  const {Usuario} = useContext(UsuarioContext)
-  //console.log('lets do it ',Usuario)
+  //const navigation = useNavigation();
+
+ const {state}=useContext(CepointContext)
+
 
   
 
@@ -47,10 +48,10 @@ export default function HomeScreen(){
        <Drawer.Screen name="Inicio" component={Bienvenida} options={{ title: 'Inicio',  headerStyle: {
             backgroundColor: '#EED317',
           }}} />
-      {Usuario.checador&&<Drawer.Screen name="Checador" component={Checador} options={{  title: 'Checador v3',  headerStyle: {
+       {state.userAccessDetail.checador&&<Drawer.Screen name="Checador" component={Checador} options={{  title: 'Checador v3',  headerStyle: {
             backgroundColor: '#EED317'
            
-          }}} />} 
+          }}} />}  
 
       <Drawer.Screen name="Control de Facturas" component={ControlFacturas}  options={{   headerStyle: {
             backgroundColor: '#EED317',

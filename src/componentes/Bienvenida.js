@@ -42,7 +42,7 @@ export default function Bienvenida() {
        <Card>
           <Card.Title style={styles.home}>{Usuario.empresa}</Card.Title>
           <Card.Divider />
-          <Text style={styles.fonts} h4>Bienvenido  {Usuario.nombre} </Text>
+          <Text style={styles.fonts} h4>Bienvenido  {Usuario.nombre} test</Text>
  
 
 
