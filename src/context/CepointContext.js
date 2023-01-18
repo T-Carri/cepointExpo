@@ -21,19 +21,20 @@ const CepointContext = createContext()
 export default CepointContext;
 
 const initialstate= {
-  userAccessDetail: ''
- 
+  userAccessDetail: '',
+  RegistroAsistenciaDetail:'', 
+  RegistroPhotoDetail: ''
 }
 
 
-
+                     
 
 
 export const CepointContextProvider = ({children}) => {
-
+  const db=getFirestore();
   const [state, dispatch] = useReducer(GlobalState,  initialstate);
 
- const {user} = useContext(UserContext)
+  const {user} = useContext(UserContext)
  
     //const [Usuario, setUsuario]= useState({})
      console.log('hay usuario?: ', user)
@@ -59,40 +60,46 @@ export const CepointContextProvider = ({children}) => {
 
    //RegistroCONTEXT
   
-  /*   const [registro, setRegistro] = useState([])
+  /* 
     const [usuarioAsistencia, setUsuarioAsistencia] =useState([])
     const [tipoAsistencia, setTipoAsistencia] = useState(0)
     const [image, setImage] = useState(null);
     const[semana, setSemana] =React.useState()
-    const querydb=getFirestore();
+    const querydb=getFirestore(); */
     
-    const Usuario = []
+    const fetchUser = async(data)=>{
+      const db=getFirestore();
+        const queryDoc = doc(db, "users", data)
+        await getDoc(queryDoc).then(res=>{
+           dispatch({type:TYPES.REGISTRO_STATE, payload:res.data()})
+           // setUsuario(res.data())
+        })
+    }
 
-        const fetchUser = async (data) => {  
-         const ref = doc(querydb, "users", data)
+  /*       const fetchUser = async (data) => { 
+          const db=getFirestore(); 
+         const ref = doc(db, "users", data)
          const docSnap = await getDoc(ref)
        
         if(docSnap.exists()) {
-          const user = docSnap.data()
-          console.log("fetch user",user.toString())
-            Usuario.push(user)
-            
+          
+            dispatch({types:TYPES.REGISTRO_STATE, payload:docSnap.data()})
         }else{ 
           console.log("No such document!")
         }
        
-        setRegistro(Usuario)
+      
 
-      }
+      } */
 
-      const activaOcupado = async ()=> {
-         const ref = doc(querydb, "users", usuarioAsistencia)
+       const activaOcupado = async (dato)=> {
+         const ref = doc(db, "users", dato)
          await updateDoc(ref, {ocupado: true})
       }
-      const desactivaOcupado = async ()=> {
-        const ref = doc(querydb, "users", usuarioAsistencia)
+      const desactivaOcupado = async (dato)=> {
+        const ref = doc(db, "users", dato)
         await updateDoc(ref, {ocupado: false})
-     } */
+     } 
 
     /*  useEffect(()=>{
                fetchUser()
@@ -217,7 +224,8 @@ console.log('Uploaded a data_url string!')
 
 
   return (
-    <CepointContext.Provider value={{state }}>
+    <CepointContext.Provider value={{state, dispatch, TYPES, fetchUser,   activaOcupado,
+      desactivaOcupado }}>
 
         {children}
     </CepointContext.Provider>

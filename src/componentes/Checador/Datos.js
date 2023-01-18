@@ -11,27 +11,37 @@ import UserContext from '../../context/AuthContext';
 import { useState } from 'react';
 import { storage } from '../../../firebase-config';
 import {  ref, uploadBytes, uploadString } from "firebase/storage"
+import CepointContext from '../../context/CepointContext';
+import { TYPES } from '../../redux/GlobalState';
 export default function Datos() {
   const navigation = useNavigation();
-    const {usuarioAsistencia,
-      registro, 
+  const {dispatch, state,   activaOcupado,
+    desactivaOcupado }=useContext(CepointContext)
+
+
+
+    const {
+      usuarioAsistencia,
       tipoAsistencia, 
-      image, 
-      setImage, 
-      activaOcupado,
-      desactivaOcupado,
+    
+      
+    
       semana  
     } = useContext(RegistroContext)
+
     const {currentU, putAsistencia , setPostReg, asignacion, postReg }= useContext(AsignacionContext)
-     const {user} =useContext(UserContext )
+     
+    
+    const {user} =useContext(UserContext )
+
      const [Ocupado, setOcupado]= useState()
     const dato= auth.currentUser;
   //calculadora de numero de semana
 
 
-const nombre = registro.map((e)=>e.nombre)
-const ocupado =  registro.map((e)=>e.ocupado).toString()
-const presupuesto = asignacion.map((e)=>e.presupuesto)
+
+const ocupado =  state?state.RegistroAsistenciaDetail.ocupado:null
+
 //const date = datoAsistencia.clave&&datoAsistencia.clave
 
 //console.log('POSTREG: ', postReg)
@@ -50,7 +60,7 @@ xhr.open("GET", file, true);
 xhr.send(null) 
 })
 
-  const storageRef = ref(storage, `Asistencias/${presupuesto}/${nombre}/${postReg.clave}`)
+  const storageRef = ref(storage, `Asistencias/${state?state.RegistroAsistenciaDetail.presupuesto:null}/${state?state.RegistroAsistenciaDetail.nombre:null}/${postReg.clave}`)
   uploadBytes(storageRef, blob).then((snapshot)=>{
     console.log('Uploaded a data_url string!')
   })
@@ -58,7 +68,7 @@ xhr.send(null)
 }
 
 const datoAsistencia= {
-  trabajador:  registro.map((e)=>e.nombre).toString(),
+  trabajador:  state?state.RegistroAsistenciaDetail.nombre:null,
   semana: semana, 
   tipoAsistencia: tipoAsistencia==0?'Entrada':'Salida',
   clave: Date.now(),
@@ -78,10 +88,10 @@ console.log('Datos Image', image)
 const handleClick= async ()=>{
   try {
     identificadorAsistencia(datoAsistencia.tipoAsistencia,ocupado).then(
-      setImage(null),
+      dispatch({type: TYPES.REGISTRO_PHOTO, payload:null }),
        navigation.navigate('Checador')
       ).then(
-      uploadFile(image)
+      uploadFile(state.RegistroPhotoDetail)
         )
         
     }    catch (error) {
@@ -105,21 +115,21 @@ const handleClick= async ()=>{
  
   
     if (params==='Entrada'&&params1=='false'){
-  activaOcupado().then( 
+  activaOcupado( state?state.RegistroAsistenciaDetail.UID:null).then( 
         await putAsistencia())
       console.log('Ahora ese usuario esta ocupado')
     } else if(params==='Entrada'&&params1=='true'){
          
-      activaOcupado().then( 
+      activaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
         await putAsistencia())
       console.log('Ahora ese usuario esta ocupado')
 
     } else if(params=='Salida'&&params1=='true'){
-      desactivaOcupado().then( 
+      desactivaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
         await putAsistencia())
       console.log('Ahora ese usuario esta desocupado')
     } else if(params=='Salida'&&params1=='false'){
-      desactivaOcupado().then( 
+      desactivaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
         await putAsistencia())
       console.log('Ahora ese usuario esta desocupado')
     } else{
@@ -155,20 +165,20 @@ useEffect(
         <Card style={styles.card}>
   
 <Card.Title>  Estas registrando a:  </Card.Title>
-<Card.Title style={styles.nombre}>  {registro.map((e)=>e.nombre)}  </Card.Title>
-<Card.Title>  {registro.map((e)=>e.empresa)}  </Card.Title>
-<Card.Title>  {registro.map((e)=>e.perfil)}  </Card.Title>
-<Card.Title>  {registro.map((e)=>e.ocupado)}  </Card.Title>
+<Card.Title style={styles.nombre}>  {state?state.RegistroAsistenciaDetail.nombre:null}  </Card.Title>
+<Card.Title>  {state?state.RegistroAsistenciaDetail.empresa:null}  </Card.Title>
+<Card.Title>  {state?state.RegistroAsistenciaDetail.perfil:null}  </Card.Title>
+<Card.Title>  {state?state.RegistroAsistenciaDetail.ocupado:null}  </Card.Title>
   <Card.Title>  # {semana} semana  </Card.Title>
    <Card.Title style={styles.EoS}>  {tipoAsistencia==0?'Entrada':'Salida'}     </Card.Title>     
 <Card.Title>  {Date()}  </Card.Title>
 
 
-{image?null:<Button onPress={handleClickCamara}>Tomar foto </Button>}
+{state.RegistroPhotoDetail?null:<Button onPress={handleClickCamara}>Tomar foto </Button>}
 
 
 <Card style={{ flex: 1}}>
-  {image&&
+  {state.RegistroPhotoDetail&&
       <Button onPress={handleClick}>Registra </Button>}
 
       <View style={styles.cameraContainer}>
@@ -178,7 +188,7 @@ useEffect(
 
 </Card>
         </Card>
-        {image && <Image source={{uri: image}} style={{flex:1}}/>}
+        {state.RegistroPhotoDetail && <Image source={{uri: state.RegistroPhotoDetail}} style={{flex:1}}/>}
     </View>
         
         

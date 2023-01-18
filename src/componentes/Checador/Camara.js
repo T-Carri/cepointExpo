@@ -3,13 +3,17 @@ import { StyleSheet ,Text, View, Button, Image, TouchableOpacity} from 'react-na
 import { Camera } from 'expo-camera';
 import RegistroContext from '../../context/RegistroContext';
 import { useNavigation } from '@react-navigation/native';
+import CepointContext from '../../context/CepointContext';
+import { TYPES } from '../../redux/GlobalState';
 
 export default function App() {
   const navigation = useNavigation();
+  const {dispatch, state }=useContext(CepointContext)
+
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
  
-  const {setImage, image}=useContext(RegistroContext)
+  //const {setImage, image}=useContext(RegistroContext)
 useEffect(() => {
     (async () => {
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
@@ -24,7 +28,8 @@ let options={
 
     if(camera){
         const data = await camera.takePictureAsync(options)
-        setImage(data.uri);
+        //setImage(data.uri);
+        dispatch({type: TYPES.REGISTRO_PHOTO, payload:data.uri })
         console.log('DATA PIC',data)
     }
   }
@@ -41,6 +46,7 @@ let options={
         <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => {
         try {
+        
           takePicture()
          
         } catch (error) {
@@ -56,15 +62,15 @@ let options={
 
 
       
-      {image && <Image source={{uri: image}} style={{flex:1}}/>}  
+      {state.RegistroPhotoDetail ? <Image source={{uri:state.RegistroPhotoDetail}} style={{flex:1}}/>:null}  
       
-      {image&&
+      {state.RegistroPhotoDetail ?
     
     <View style={styles.buttonContainer1}>
     <TouchableOpacity 
     style={styles.button1} 
     onPress={()=>(navigation.navigate('datosRegistroAsistencia'))} />
-    </View>
+    </View>:null
        }
         
 
