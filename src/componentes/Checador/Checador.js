@@ -1,21 +1,18 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React, {useState, useContext} from 'react'
-import { Card, Button, Image,  ButtonGroup} from '@rneui/themed';
+import { Card, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import  AsignacionContext   from '../../context/AsignacionContext';
 
+import CepointContext from '../../context/CepointContext';
+import { TYPES } from '../../redux/GlobalState';
 
-import RegistroContext from '../../context/RegistroContext';
 export default function Checador() {
-  const {asignacion} = useContext(AsignacionContext)
-const {setTipoAsistencia} = useContext(RegistroContext)
+  const {dispatch, state }=useContext(CepointContext)
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   
-//console.log(asignacion)
-//console.log(asignacion.data()) 
 
-//console.log('TEST VALUE TIPO DE ASISTENCIA', selectedIndex)
 
 const navigation = useNavigation();
 
@@ -27,9 +24,9 @@ const navigation = useNavigation();
 
            <Card>
             
-           <Card.Title style={styles.checador}>{asignacion.map((e)=>e.obra)}</Card.Title>
-          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.presupuesto)}</Card.Title>
-          <Card.Title style={styles.checador}>{asignacion.map((e)=>e.ubicacion)}</Card.Title>   
+           <Card.Title style={styles.checador}>{state.PresupuestoDetail?state.PresupuestoDetail.obra:null}</Card.Title>
+          <Card.Title style={styles.checador}>{state.PresupuestoDetail?state.PresupuestoDetail.presupuesto:null}</Card.Title>
+          <Card.Title style={styles.checador}>{state.PresupuestoDetail?state.PresupuestoDetail.ubicacion:null}</Card.Title>   
           <Card.Divider />
 
           <Image
@@ -52,7 +49,8 @@ const navigation = useNavigation();
             selectedIndex={ selectedIndex}
             onPress={(value)=> {
               setSelectedIndex(value),
-              setTipoAsistencia(value)
+              dispatch({type:TYPES.TIPO_ASISTENCIA, payload:value})
+              
             }}
             containerStyle={{ 
               marginBottom: 20, 

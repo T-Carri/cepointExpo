@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet ,Text, View, Button, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet ,Text, View, Image, TouchableOpacity} from 'react-native';
 import { Camera } from 'expo-camera';
-import RegistroContext from '../../context/RegistroContext';
+
 import { useNavigation } from '@react-navigation/native';
 import CepointContext from '../../context/CepointContext';
 import { TYPES } from '../../redux/GlobalState';
@@ -13,13 +13,13 @@ export default function App() {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
  
-  //const {setImage, image}=useContext(RegistroContext)
+
 useEffect(() => {
     (async () => {
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(cameraStatus.status === 'granted');
 })();
-  }, []);
+  }, []); 
 
   const takePicture = async () => {
 let options={
@@ -28,7 +28,7 @@ let options={
 
     if(camera){
         const data = await camera.takePictureAsync(options)
-        //setImage(data.uri);
+       
         dispatch({type: TYPES.REGISTRO_PHOTO, payload:data.uri })
         console.log('DATA PIC',data)
     }

@@ -1,19 +1,8 @@
-import React, {createContext, useReducer, useContext, useEffect} from 'react'
+import React, {createContext, useReducer, useContext, useEffect, useState} from 'react'
 import { GlobalState, TYPES } from '../redux/GlobalState';
 //Usuario
 import { getFirestore, doc, get, query, where, collection, getDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore"
 import UserContext from './AuthContext';
-
-//Registro
-//import { getFirestore, update, FieldValue, get, query, where, collection, getDoc, onSnapshot, doc, updateDoc, arrayUnion} from "firebase/firestore"
-//import AsignacionContext from './AsignacionContext';
-
-//asignacion
-//import { getFirestore, doc, get, query, where, collection, getDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore"
-//import {  ref, uploadBytes, uploadString } from "firebase/storage";
-//import { auth, storage } from '../../firebase-config';
-//import UserContext from './AuthContext';
-//import RegistroContext from './RegistroContext';
 
 
 
@@ -23,7 +12,10 @@ export default CepointContext;
 const initialstate= {
   userAccessDetail: '',
   RegistroAsistenciaDetail:'', 
-  RegistroPhotoDetail: ''
+  RegistroPhotoDetail: '', 
+  TipoAsistenciaDetail: '', 
+  PresupuestoDetail:'', 
+  UsuarioAsistenciaDetail:''
 }
 
 
@@ -33,7 +25,7 @@ const initialstate= {
 export const CepointContextProvider = ({children}) => {
   const db=getFirestore();
   const [state, dispatch] = useReducer(GlobalState,  initialstate);
-
+  const [semana, setSemana] = useState()
   const {user} = useContext(UserContext)
  
     //const [Usuario, setUsuario]= useState({})
@@ -44,7 +36,7 @@ export const CepointContextProvider = ({children}) => {
         const queryDoc = doc(db, "users", user.uid)
         await getDoc(queryDoc).then(res=>{
            dispatch({type:TYPES.CALL_ACCESOS, payload:res.data()})
-           // setUsuario(res.data())
+      
         })
     }
 
@@ -60,13 +52,7 @@ export const CepointContextProvider = ({children}) => {
 
    //RegistroCONTEXT
   
-  /* 
-    const [usuarioAsistencia, setUsuarioAsistencia] =useState([])
-    const [tipoAsistencia, setTipoAsistencia] = useState(0)
-    const [image, setImage] = useState(null);
-    const[semana, setSemana] =React.useState()
-    const querydb=getFirestore(); */
-    
+
     const fetchUser = async(data)=>{
       const db=getFirestore();
         const queryDoc = doc(db, "users", data)
@@ -76,21 +62,7 @@ export const CepointContextProvider = ({children}) => {
         })
     }
 
-  /*       const fetchUser = async (data) => { 
-          const db=getFirestore(); 
-         const ref = doc(db, "users", data)
-         const docSnap = await getDoc(ref)
-       
-        if(docSnap.exists()) {
-          
-            dispatch({types:TYPES.REGISTRO_STATE, payload:docSnap.data()})
-        }else{ 
-          console.log("No such document!")
-        }
-       
-      
 
-      } */
 
        const activaOcupado = async (dato)=> {
          const ref = doc(db, "users", dato)
@@ -101,30 +73,37 @@ export const CepointContextProvider = ({children}) => {
         await updateDoc(ref, {ocupado: false})
      } 
 
-    /*  useEffect(()=>{
-               fetchUser()
-     },[registro])
+  
 
-       */
-     
-   /*   useEffect(()=>{
-           ()=> {}
-          console.log('MONTAJE: ', registro)
-          return ()=> {console.log('CLEANER: ', registro)}
-        }, [registro]) */
+
+//Asignacion context
+
+const getPresupuestos =async () => { 
+
+  const q = query(collection(db, "asignaciones"),where("residenteUid", "==", user.uid ))
+  await onSnapshot(q, (query)=>{
+    
           
- /*       
- useEffect(()=>{
-activaOcupado()
-return()=> activaOcupado()
- },[usuarioAsistencia] )
-            
- useEffect(()=>{
-  desactivaOcupado()
-  return()=> desactivaOcupado()
-   },[usuarioAsistencia] )
- */
-  /*  useEffect(
+    query.forEach((doc)=>{
+      dispatch({type:TYPES.CALL_PRESUPUESTO, payload:doc.data()})
+      
+     
+    })
+    
+    
+  }) }
+
+  useEffect(()=>{
+      getPresupuestos()
+  },[user])
+
+
+
+
+
+
+
+  useEffect(
     ()=>{
     
       setSemana(numeroDeSemana(new Date()))
@@ -147,76 +126,25 @@ return()=> activaOcupado()
   
      
   };
-  
-  const numeroDeSemanaActual = numeroDeSemana(new Date());
-
- */
 
 
 
 
-//Asignacion context
 
-
-
-/* const [asignacion, setAsignacion]= useState("test")
-const [currentU, setCurrentU] = useState()
-const [uidAsignacion, setUidAsignacion ] = useState('')
-const [postReg, setPostReg] = useState() */
-//const {user} = useContext(UserContext)
-//const {registro}=useContext(RegistroContext)
-//  const [usuario, setUsuario] = useState(user.uid)
-// const [actualizado, setActualizado]= useState('')
-/*  const dato= auth.currentUser;
- if (dato!==null){
-   console.log( "uid desde checador:", dato.uid )
-    //setCurrentU(dato.uid)
- } */
-
-/* 
-
-const getPresupuestos =async () => { 
-  const querydb=getFirestore();
-  const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", user.uid ))
-  await onSnapshot(q, (query)=>{
-    const data=[]
-     //const dataid=[]         
-    query.forEach((doc)=>{
-      data.push(doc.data())
-      console.log("UIDD", doc.id)
-      setUidAsignacion(doc.id)
-    })
+  const putAsistencia = async(dato) =>{
+    const querydb=getFirestore();
     
-    setAsignacion(data)
-  }) }
-
-  useEffect(()=>{
-      getPresupuestos()
-  },[user])
+    const q = doc(querydb, "asignaciones", dato);
+    await updateDoc( q, {
+  
+      asistencias : arrayUnion(state.UsuarioAsistenciaDetail)
+    }
       
+    )
+  }
+  
+  
 
-console.log('desde asignacion context:', uidAsignacion )  
-
-
-const putAsistencia = async() =>{
-const querydb=getFirestore();
-//const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
-const q = doc(querydb, "asignaciones", uidAsignacion);
-await updateDoc( q, {
-
-asistencias : arrayUnion(postReg )
-}
-
-)
-}
- */
-/* function uploadFile(file) {
-const storageRef = ref(storage, 'Asistencias')
-uploadString(storageRef, file, 'base64url').then((snapshot)=>{
-console.log('Uploaded a data_url string!')
-})
-
-} */
 
 
 
@@ -225,7 +153,7 @@ console.log('Uploaded a data_url string!')
 
   return (
     <CepointContext.Provider value={{state, dispatch, TYPES, fetchUser,   activaOcupado,
-      desactivaOcupado }}>
+      desactivaOcupado, semana, putAsistencia }}>
 
         {children}
     </CepointContext.Provider>

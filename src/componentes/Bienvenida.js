@@ -3,15 +3,16 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Card, Text, Button } from '@rneui/themed';
 import { auth } from '../../firebase-config';
 import { useNavigation } from '@react-navigation/native';
-import { getFirestore, doc, getDoc} from "firebase/firestore";
-import UserContext from '../context/AuthContext';
+
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import UsuarioContext from '../context/UsuarioContext';
+import UserContext from '../context/AuthContext';
+import CepointContext from '../context/CepointContext';
 export default function Bienvenida() {
-  const {user, logout}= useContext(UserContext)
+  const {logout}= useContext(UserContext)
   const navigation = useNavigation();
   const [error, setError] = useState('');
-  const {Usuario} = useContext(UsuarioContext)
+  const {state} = useContext(CepointContext)
 
   const handleSignOut = async()=>{
     try{
@@ -40,9 +41,9 @@ export default function Bienvenida() {
   return (
     <View>
        <Card>
-          <Card.Title style={styles.home}>{Usuario.empresa}</Card.Title>
+          <Card.Title style={styles.home}>{state.userAccessDetail?state.userAccessDetail.empresa:null}</Card.Title>
           <Card.Divider />
-          <Text style={styles.fonts} h4>Bienvenido  {Usuario.nombre} test</Text>
+          <Text style={styles.fonts} h4>Bienvenido  {state.userAccessDetail?state.userAccessDetail.empresa:null} test</Text>
  
 
 

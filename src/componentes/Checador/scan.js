@@ -2,22 +2,20 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Button, Overlay, Icon } from '@rneui/themed';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import RegistroContext from '../../context/RegistroContext';
+
 import { useNavigation } from '@react-navigation/native';
 import CepointContext from '../../context/CepointContext';
+import { TYPES } from '../../redux/GlobalState';
 export default function Scan() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [isLoanding, setIsLoanding]= useState(false);
-     const {
-       setUsuarioAsistencia,
-      
-       tipoAsistencia,
-       semana, 
-       
-      } = useContext(RegistroContext) 
+    const { state, fetchUser, semana}=useContext(CepointContext)
+
+
+
      const navigation = useNavigation();
-    const {state, fetchUser}=useContext(CepointContext)
+    
      const [visible, setVisible] = useState(false);
 
 const toggleOverlay = () => {
@@ -36,7 +34,7 @@ const toggleOverlay = () => {
     const handleBarCodeScanned = async ({ type, data }) => {
       try {
         setScanned(true);
-        await setUsuarioAsistencia(data)
+      
          fetchUser(data)
          
          // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
@@ -81,7 +79,7 @@ const toggleOverlay = () => {
                      {semana}
                    </Text>
                    <Text style={styles.textSecondary}>
-                   {tipoAsistencia==0?'Entrada':'Salida'} 
+                   {state.TipoAsistenciaDetail==0?'Entrada':'Salida'} 
                    </Text>
                    <Text style={styles.textSecondary}>
                    {Date()}
