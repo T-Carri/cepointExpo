@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {  View, StyleSheet, Image } from 'react-native';
 import { Card, Button} from '@rneui/themed';
-
+import * as Location from 'expo-location';
 import Icon from '@mdi/react'
 import { mdiAccountClock } from '@mdi/js'
 
@@ -15,12 +15,50 @@ import CepointContext from '../../context/CepointContext';
 import { TYPES } from '../../redux/GlobalState';
 export default function Datos() {
   const navigation = useNavigation();
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
   const {dispatch, state,   activaOcupado,
-    desactivaOcupado, semana, putAsistencia }=useContext(CepointContext)
+    desactivaOcupado, semana, putAsistencia, TipoAsistencia }=useContext(CepointContext)
     const {user} =useContext(UserContext )
  
     console.log('TIPO ASISTENCIA', state.TipoAsistenciaDetail )
     
+
+//PRUEBAS PARA CAPTURAR LOCALIZACION
+
+useEffect(() => {
+  (async () => {
+    
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+  })();
+}, []);
+
+
+console.log('LOCALIZACION:',  location?location:null)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     async function uploadFile(file) {
     const blob = await new Promise((resolve, reject)=>{
       const xhr = new XMLHttpRequest()
@@ -42,14 +80,17 @@ export default function Datos() {
     const datoAsistencia= {
       trabajador:  state?state.RegistroAsistenciaDetail.nombre:null,
       semana: semana, 
-      tipoAsistencia: state.TipoAsistenciaDetail==0?'Entrada':'Salida',
+      tipoAsistencia: TipoAsistencia==0?'Entrada':'Salida',
       clave: Date.now(),
       date: Date(),  
       presupuesto:state.PresupuestoDetail?state.PresupuestoDetail.presupuesto:null,
-      identidadChecador: user.uid
+      identidadChecador: user.uid, 
+      latitud:  location?location.coords.latitude:null, 
+      longitud:  location?location.coords.longitud:null
+
     }
       
-    
+    console.log('TESTFINAL', datoAsistencia.tipoAsistencia,  state?state.RegistroAsistenciaDetail.ocupado:null)
     
     const handleClick= async ()=>{
       try {
@@ -63,7 +104,7 @@ export default function Datos() {
         }    catch (error) {
          console.log(error)
        }
-      
+      console.log('datoAsistencia', datoAsistencia)
      }
              
             
@@ -80,25 +121,25 @@ export default function Datos() {
       
      
       
-        if (params==='Entrada'&&params1=='false'){
-      activaOcupado( state?state.RegistroAsistenciaDetail.UID:null).then( 
-            await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
-          console.log('Ahora ese usuario esta ocupado')
-        } else if(params==='Entrada'&&params1=='true'){
+        if (params==='Entrada'&&params1==false){
+                           activaOcupado( state?state.RegistroAsistenciaDetail.UID:null).then( 
+                           await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
+                               console.log('Ahora ese usuario esta ocupado')
+      } else if(params==='Entrada'&&params1==true){
              
-          activaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
-            await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
-          console.log('Ahora ese usuario esta ocupado')
+                           activaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
+                           await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
+                           console.log('Ahora ese usuario esta ocupado')
     
-        } else if(params=='Salida'&&params1=='true'){
-          desactivaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
-            await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
-          console.log('Ahora ese usuario esta desocupado')
-        } else if(params=='Salida'&&params1=='false'){
-          desactivaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
-            await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
-          console.log('Ahora ese usuario esta desocupado')
-        } else{
+     } else if(params=='Salida'&&params1==true){
+                         desactivaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
+                         await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
+                         console.log('Ahora ese usuario esta desocupado')
+     } else if(params=='Salida'&&params1==false){
+                         desactivaOcupado(state?state.RegistroAsistenciaDetail.UID:null).then( 
+                         await putAsistencia(state?state.PresupuestoDetail.idProyecto:null))
+                         console.log('Ahora ese usuario esta desocupado')
+    } else{
           console.log('there a error go and find it')
         }
      
@@ -136,7 +177,7 @@ export default function Datos() {
     <Card.Title>  {state?state.RegistroAsistenciaDetail.perfil:null}  </Card.Title>
     <Card.Title>  {state?state.RegistroAsistenciaDetail.ocupado:null}  </Card.Title>
       <Card.Title>  # {semana} semana  </Card.Title>
-       <Card.Title style={styles.EoS}>  {state.TipoAsistenciaDetail==0?'Entrada':'Salida'}     </Card.Title>     
+       <Card.Title style={styles.EoS}>  {TipoAsistencia==0?'Entrada':'Salida'}     </Card.Title>     
     <Card.Title>  {Date()}  </Card.Title>
     
     

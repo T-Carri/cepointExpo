@@ -13,7 +13,7 @@ const initialstate= {
   userAccessDetail: '',
   RegistroAsistenciaDetail:'', 
   RegistroPhotoDetail: '', 
-  TipoAsistenciaDetail: '', 
+  
   PresupuestoDetail:'', 
   UsuarioAsistenciaDetail:''
 }
@@ -26,6 +26,7 @@ export const CepointContextProvider = ({children}) => {
   const db=getFirestore();
   const [state, dispatch] = useReducer(GlobalState,  initialstate);
   const [semana, setSemana] = useState()
+  const [TipoAsistencia, setTipoAsistencia]=useState(0)
   const {user} = useContext(UserContext)
  
     //const [Usuario, setUsuario]= useState({})
@@ -36,7 +37,7 @@ export const CepointContextProvider = ({children}) => {
         const queryDoc = doc(db, "users", user.uid)
         await getDoc(queryDoc).then(res=>{
            dispatch({type:TYPES.CALL_ACCESOS, payload:res.data()})
-      
+           // setUsuario(res.data())
         })
     }
 
@@ -133,7 +134,7 @@ const getPresupuestos =async () => {
 
   const putAsistencia = async(dato) =>{
     const querydb=getFirestore();
-    
+    //const q = query(collection(querydb, "asignaciones"),where("residenteUid", "==", dato.uid ))
     const q = doc(querydb, "asignaciones", dato);
     await updateDoc( q, {
   
@@ -153,7 +154,7 @@ const getPresupuestos =async () => {
 
   return (
     <CepointContext.Provider value={{state, dispatch, TYPES, fetchUser,   activaOcupado,
-      desactivaOcupado, semana, putAsistencia }}>
+      desactivaOcupado, semana, putAsistencia, TipoAsistencia, setTipoAsistencia }}>
 
         {children}
     </CepointContext.Provider>

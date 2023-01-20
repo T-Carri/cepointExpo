@@ -21,7 +21,7 @@ export default function Bienvenida() {
          navigation.replace("Login")
          await AsyncStorage.removeItem('Auth Token')
          let authToken = await AsyncStorage.getItem('Auth Token')
-         console.log('Token: ', authToken)
+         //console.log('Token: ', authToken)
        })
        console.log('You are logged out')
      } catch(e) {
@@ -43,7 +43,7 @@ export default function Bienvenida() {
        <Card>
           <Card.Title style={styles.home}>{state.userAccessDetail?state.userAccessDetail.empresa:null}</Card.Title>
           <Card.Divider />
-          <Text style={styles.fonts} h4>Bienvenido  {state.userAccessDetail?state.userAccessDetail.empresa:null} test</Text>
+          <Text style={styles.fonts} h4>Bienvenido  {state.userAccessDetail?state.userAccessDetail.nombre:null} test</Text>
  
 
 

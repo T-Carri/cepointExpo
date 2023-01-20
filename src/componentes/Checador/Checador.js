@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect, useCallback} from 'react'
 import { Card, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -8,11 +8,12 @@ import CepointContext from '../../context/CepointContext';
 import { TYPES } from '../../redux/GlobalState';
 
 export default function Checador() {
-  const {dispatch, state }=useContext(CepointContext)
+  const {dispatch, state, TipoAsistencia, setTipoAsistencia  }=useContext(CepointContext)
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   
 
+console.log('test TIPO DE ASISTENCIA ', TipoAsistencia)
 
 const navigation = useNavigation();
 
@@ -46,11 +47,11 @@ const navigation = useNavigation();
             selectedButtonStyle={{backgroundColor : "#FFC300", color : "black"}}
             selectedTextStyle={{ color : "black"}}
             disabledTextStyle={{color : "white"}}
-            selectedIndex={ selectedIndex}
+            selectedIndex={TipoAsistencia}
             onPress={(value)=> {
-              setSelectedIndex(value),
-              dispatch({type:TYPES.TIPO_ASISTENCIA, payload:value})
-              
+              setTipoAsistencia(value),
+             
+              console.log('BOTON ASISTENCIA TIPO ', TipoAsistencia)
             }}
             containerStyle={{ 
               marginBottom: 20, 

@@ -4,7 +4,7 @@ export const TYPES ={
     CALL_ACCESOS: 'CALL_ACCESOS', 
     REGISTRO_STATE: 'REGISTRO_STATE',
     REGISTRO_PHOTO:'REGISTRO_PHOTO', 
-    TIPO_ASISTENCIA: 'TIPO_ASISTENCIA', 
+    
     CALL_PRESUPUESTO: 'CALL_PRESUPUESTO',
     SET_USUARIO_ASISTENCIA: 'SET_USUARIO_ASISTENCIA'
 }
@@ -28,11 +28,7 @@ switch(action.type){
                  ...state,
                  RegistroPhotoDetail: action.payload
              }
-    case TYPES.TIPO_ASISTENCIA:
-          return {
-                   ...state,
-                TipoAsistenciaDetail: action.payload
-                     }
+
    case TYPES.CALL_PRESUPUESTO:
          return {
                    ...state,

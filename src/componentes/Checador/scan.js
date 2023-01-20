@@ -10,7 +10,7 @@ export default function Scan() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [isLoanding, setIsLoanding]= useState(false);
-    const { state, fetchUser, semana}=useContext(CepointContext)
+    const { state, fetchUser, semana, TipoAsistencia}=useContext(CepointContext)
 
 
 
@@ -79,7 +79,7 @@ const toggleOverlay = () => {
                      {semana}
                    </Text>
                    <Text style={styles.textSecondary}>
-                   {state.TipoAsistenciaDetail==0?'Entrada':'Salida'} 
+                   {TipoAsistencia==0?'Entrada':'Salida'} 
                    </Text>
                    <Text style={styles.textSecondary}>
                    {Date()}
