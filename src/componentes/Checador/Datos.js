@@ -1,3 +1,186 @@
+import React, { useState, useEffect, useContext } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
+import { Card, Button } from '@rneui/themed';
+import * as Location from 'expo-location';
+
+import { useNavigation } from '@react-navigation/native';
+import UserContext from '../../context/AuthContext';
+import { storage } from '../../../firebase-config';
+import { ref, uploadFile } from "firebase/storage";
+import CepointContext from '../../context/CepointContext';
+import { TYPES } from '../../redux/GlobalState';
+
+
+//OLD
+/* import React, { useContext, useEffect, useState } from 'react'
+import {  View, StyleSheet, Image } from 'react-native';
+import { Card, Button} from '@rneui/themed';
+import * as Location from 'expo-location';
+
+
+import { useNavigation } from '@react-navigation/native';
+
+import UserContext from '../../context/AuthContext';
+
+import { storage } from '../../../firebase-config';
+//HAY UNA DIFERENCIA ENTRE EL CODIGO QUE ME RECOMENDO GIA (chatGPT), TAL DIFERENCIA ES QUE CONSIDERA MEJOR PRACTICA SUBIR upload QUE uploadBytes
+
+import {  ref, uploadBytes } from "firebase/storage"
+import CepointContext from '../../context/CepointContext';
+import { TYPES } from '../../redux/GlobalState';
+ */
+
+
+
+
+const Datos = () => {
+// state GIA
+const [location, setLocation] = useState(null);
+const [error, setError] = useState(null);
+const { user } = useContext(UserContext);
+const { dispatch, state, activaOcupado, desactivaOcupado, semana, putAsistencia, TipoAsistencia } = useContext(CepointContext);
+// state OLD
+/* 
+const [location, setLocation] = useState(null);
+const [errorMsg, setErrorMsg] = useState(null); */
+
+ 
+
+
+
+
+
+// Navigation GIA SAME THAN OLD
+const navigation = useNavigation();
+
+
+
+
+// Get current location
+useEffect(() => {
+(async () => {
+try {
+let { status } = await Location.requestForegroundPermissionsAsync();
+if (status !== 'granted') {
+setError('Permission to access location was denied');
+return;
+}
+let location = await Location.getCurrentPositionAsync({});
+setLocation(location);
+} catch (error) {
+console.log('Error getting location:', error);
+setError(error);
+}
+})();
+}, []);
+
+// Create data for attendance
+const datoAsistencia = {
+trabajador: state?.RegistroAsistenciaDetail.nombre || null,
+semana: semana,
+tipoAsistencia: TipoAsistencia === 0 ? 'Entrada' : 'Salida',
+clave: Date.now(),
+date: Date(),
+presupuesto: state.PresupuestoDetail?.presupuesto || null,
+identidadChecador: user.uid,
+latitud: location?.coords.latitude || null,
+longitud: location?.coords.longitude || null
+}
+
+const handleClick = async () => {
+try {
+// Dispatch action
+identificadorAsistencia(datoAsistencia.tipoAsistencia, state?.RegistroAsistenciaDetail.ocupado).then(
+dispatch({
+type: TYPES.PUT_ASISTENCIA,
+payload: datoAsistencia
+})
+);
+// Upload file to Firebase Storage
+const storageRef = ref(storage, `Asistencias/${state?.PresupuestoDetail.presupuesto}/${state?.RegistroAsistenciaDetail.nombre}/${state.UsuarioAsistenciaDetail?.clave}`);
+
+
+uploadFile(storageRef, file)
+.then(() => console.log('File uploaded successfully'))
+.catch((error) => console.log('Error uploading file:', error));
+} catch (error) {
+console.log('Error in handleClick:', error);
+}
+}
+
+return (
+<View style={styles.container}>
+<Card>
+
+<Button onPress={handleClick}>
+{TipoAsistencia === 0 ? 'Registrar Entrada' : 'Registrar Salida'}
+</Button>
+</Card>
+{error && <Text>Error: {error}</Text>}
+</View>
+);
+};
+
+const styles = StyleSheet.create({
+container: {
+flex: 1,
+alignItems: 'center',
+justifyContent: 'center',
+},
+});
+
+export default Datos;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useContext, useEffect, useState } from 'react'
 import {  View, StyleSheet, Image } from 'react-native';
 import { Card, Button} from '@rneui/themed';
@@ -29,17 +212,25 @@ export default function Datos() {
 
 useEffect(() => {
   (async () => {
-    
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+     
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    } catch (error) {
+      console.log('THIS IS THE ERROR IN LOCATION',error);
     }
-
-    let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
   })();
 }, []);
+
+
+
+
+
 
 
 console.log('LOCALIZACION:',  location?location:null)
@@ -85,8 +276,8 @@ console.log('LOCALIZACION:',  location?location:null)
       date: Date(),  
       presupuesto:state.PresupuestoDetail?state.PresupuestoDetail.presupuesto:null,
       identidadChecador: user.uid, 
-      latitud:  location?location.coords.latitude:null, 
-      longitud:  location?location.coords.longitud:null
+      latitud: location&&location.coords.latitude, 
+      longitud:  location&&location.coords.longitude
 
     }
       
@@ -243,3 +434,4 @@ console.log('LOCALIZACION:',  location?location:null)
 
 
 
+ */
