@@ -4,10 +4,11 @@ export const TYPES ={
     CALL_ACCESOS: 'CALL_ACCESOS', 
     REGISTRO_STATE: 'REGISTRO_STATE',
     REGISTRO_PHOTO:'REGISTRO_PHOTO', 
-    
     CALL_PRESUPUESTO: 'CALL_PRESUPUESTO',
-    SET_USUARIO_ASISTENCIA: 'SET_USUARIO_ASISTENCIA'
+    SET_LOCATION: 'SET_LOCATION',
+    PUT_ASISTENCIA: 'PUT_ASISTENCIA', 
 }
+    
 
 export const GlobalState=(state, action )=>{
 switch(action.type){
@@ -34,11 +35,16 @@ switch(action.type){
                    ...state,
                 PresupuestoDetail: action.payload
                                    }           
-   case TYPES.SET_USUARIO_ASISTENCIA:
+   case TYPES.SET_LOCATION:
          return {
                    ...state,
-           UsuarioAsistenciaDetail: action.payload
-                                                              }         
+           LocationDetail: action.payload
+   }   
+  case TYPES.PUT_ASISTENCIA:
+        return {
+                  ...state,
+          PutAsistenciaDetail: action.payload
+      }          
 }
     
 }

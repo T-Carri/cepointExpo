@@ -13,9 +13,9 @@ const initialstate= {
   userAccessDetail: '',
   RegistroAsistenciaDetail:'', 
   RegistroPhotoDetail: '', 
-  
+  PutAsistenciaDetail:'',
   PresupuestoDetail:'', 
-  UsuarioAsistenciaDetail:''
+
 }
 
 
@@ -138,7 +138,7 @@ const getPresupuestos =async () => {
     const q = doc(querydb, "asignaciones", dato);
     await updateDoc( q, {
   
-      asistencias : arrayUnion(state.UsuarioAsistenciaDetail)
+      asistencias : arrayUnion(state.PutAsistenciaDetail)
     }
       
     )

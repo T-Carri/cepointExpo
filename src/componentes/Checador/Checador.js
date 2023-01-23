@@ -3,7 +3,7 @@ import React, {useState, useContext, useEffect, useCallback} from 'react'
 import { Card, Image,  ButtonGroup} from '@rneui/themed';
 import {  StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import * as Location from 'expo-location';
 import CepointContext from '../../context/CepointContext';
 import { TYPES } from '../../redux/GlobalState';
 
@@ -11,13 +11,30 @@ export default function Checador() {
   const {dispatch, state, TipoAsistencia, setTipoAsistencia  }=useContext(CepointContext)
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  
+
 
 console.log('test TIPO DE ASISTENCIA ', TipoAsistencia)
 
 const navigation = useNavigation();
 
     
+useEffect(() => {
+  (async () => {
+    
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    dispatch({type:TYPES.SET_LOCATION, payload:location})
+  })();
+}, []);
+
+
+
+
 
   return (
     <View>

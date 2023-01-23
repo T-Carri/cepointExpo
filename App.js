@@ -7,7 +7,8 @@ import LoginScreen from './src/views/LoginScreen';
 import HomeScreen from './src/views/HomeScreen';
 
 import Scan from './src/componentes/Checador/scan';
-import Datos from './src/componentes/Checador/Datos'
+
+import Datos from './src/componentes/Checador/Datos';
 import Camara from './src/componentes/Checador/Camara';
 
 import {AuthContextProvider} from './src/context/AuthContext'

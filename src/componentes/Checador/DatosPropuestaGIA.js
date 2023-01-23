@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Card, Button } from '@rneui/themed';
-
+import * as Location from 'expo-location';
 
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../context/AuthContext';
 import { storage } from '../../../firebase-config';
-import { ref,  uploadBytes } from "firebase/storage";
+import { ref, uploadFile } from "firebase/storage";
 import CepointContext from '../../context/CepointContext';
 import { TYPES } from '../../redux/GlobalState';
 
 const Datos = () => {
 // state
-
+const [location, setLocation] = useState(null);
 const [error, setError] = useState(null);
 const { user } = useContext(UserContext);
 const { dispatch, state, activaOcupado, desactivaOcupado, semana, putAsistencia, TipoAsistencia } = useContext(CepointContext);
@@ -20,13 +20,23 @@ const { dispatch, state, activaOcupado, desactivaOcupado, semana, putAsistencia,
 // Navigation
 const navigation = useNavigation();
 
-
-
-
-
-
-
-
+// Get current location
+useEffect(() => {
+(async () => {
+try {
+let { status } = await Location.requestForegroundPermissionsAsync();
+if (status !== 'granted') {
+setError('Permission to access location was denied');
+return;
+}
+let location = await Location.getCurrentPositionAsync({});
+setLocation(location);
+} catch (error) {
+console.log('Error getting location:', error);
+setError(error);
+}
+})();
+}, []);
 
 // Create data for attendance
 const datoAsistencia = {
@@ -37,8 +47,8 @@ clave: Date.now(),
 date: Date(),
 presupuesto: state.PresupuestoDetail?.presupuesto || null,
 identidadChecador: user.uid,
-latitud:state.LocationDetail?state.LocationDetail.coords.latitude: null,
-longitud: state.LocationDetail?state.LocationDetail.coords.longitude : null
+latitud: location?.coords.latitude || null,
+longitud: location?.coords.longitude || null
 }
 
 const handleClick = async () => {
@@ -70,7 +80,7 @@ async function uploadFile(file) {
     xhr.send(null) 
     })
     
-      const storageRef = ref(storage, `Asistencias/${state?state.PresupuestoDetail.presupuesto:null}/${state?state.RegistroAsistenciaDetail.nombre:null}/${state?state.PutAsistenciaDetail.clave:null}`)
+      const storageRef = ref(storage, `Asistencias/${state?state.PresupuestoDetail.presupuesto:null}/${state?state.RegistroAsistenciaDetail.nombre:null}/${state.UsuarioAsistenciaDetail?state.UsuarioAsistenciaDetail.clave:null}`)
       uploadBytes(storageRef, blob).then((snapshot)=>{
         console.log('Uploaded a data_url string!')
       })
@@ -107,7 +117,7 @@ const  identificadorAsistencia= async(params, params1)=> {
 
 
 
-console.log('DATOS PUT ASISTENCIA', state?state.PutAsistenciaDetail:null, state.LocationDetail?state.LocationDetail: null)
+
 
 
 
