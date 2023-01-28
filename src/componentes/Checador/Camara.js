@@ -7,77 +7,77 @@ import CepointContext from '../../context/CepointContext';
 import { TYPES } from '../../redux/GlobalState';
 
 export default function App() {
-  const navigation = useNavigation();
-  const {dispatch, state }=useContext(CepointContext)
+const navigation = useNavigation();
+const {dispatch, state }=useContext(CepointContext)
 
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [camera, setCamera] = useState(null);
- 
+const [hasCameraPermission, setHasCameraPermission] = useState(null);
+const [camera, setCamera] = useState(null);
 
 useEffect(() => {
-    (async () => {
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === 'granted');
+(async () => {
+const cameraStatus = await Camera.requestCameraPermissionsAsync();
+setHasCameraPermission(cameraStatus.status === 'granted');
 })();
-  }, []); 
+}, []);
 
-  const takePicture = async () => {
+const takePicture = async () => {
 let options={
-  quality:0.3
+quality:0.3
 }
 
-    if(camera){
-        const data = await camera.takePictureAsync(options)
-       
-        dispatch({type: TYPES.REGISTRO_PHOTO, payload:data.uri })
-        console.log('DATA PIC',data)
-    }
-  }
 
-  if (hasCameraPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-  
-  return (
-   <View style={{ flex: 1}}>
+if(camera){
+    const data = await camera.takePictureAsync(options)
+   
+    dispatch({type: TYPES.REGISTRO_PHOTO, payload:data.uri })
+    console.log('DATA PIC',data)
+    navigation.navigate('datosRegistroAsistencia');
+}
+}
+
+if (hasCameraPermission === false) {
+return <Text>No access to camera</Text>;
+}
+
+return (
+<View style={{ flex: 1}}>
 
 <View style={styles.container}>
       <Camera style={styles.camera} ref={ref => setCamera(ref)}    >
         <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => {
         try {
-        
-          takePicture()
-         
-        } catch (error) {
-          console.log(error)
-        }}
-        
-      }/>
-            
-        </View>
-      </Camera>
-    </View>
 
-
-
-      
-      {state.RegistroPhotoDetail ? <Image source={{uri:state.RegistroPhotoDetail}} style={{flex:1}}/>:null}  
-      
-      {state.RegistroPhotoDetail ?
-    
-    <View style={styles.buttonContainer1}>
-    <TouchableOpacity 
-    style={styles.button1} 
-    onPress={()=>(navigation.navigate('datosRegistroAsistencia'))} />
-    </View>:null
-       }
-        
-
+      takePicture()
      
-   
-      
+    } catch (error) {
+      console.log(error)
+    }}
     
+  }/>
+        
+    </View>
+  </Camera>
+</View>
+
+
+
+  
+  {state.RegistroPhotoDetail ? <Image source={{uri:state.RegistroPhotoDetail}} style={{flex:1}}/>:null}  
+  
+  {state.RegistroPhotoDetail ?
+
+<View style={styles.buttonContainer1}>
+<TouchableOpacity 
+style={styles.button1} 
+onPress={()=>(navigation.navigate('datosRegistroAsistencia'))} />
+</View>:null
+   }
+    
+
+ 
+
+  
    </View>
   );
 }

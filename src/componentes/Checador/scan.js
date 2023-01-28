@@ -9,6 +9,7 @@ import { TYPES } from '../../redux/GlobalState';
 export default function Scan() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [visible, setVisible] = useState(false);
     const [isLoanding, setIsLoanding]= useState(false);
     const { state, fetchUser, semana, TipoAsistencia}=useContext(CepointContext)
 
@@ -16,7 +17,7 @@ export default function Scan() {
 
      const navigation = useNavigation();
     
-     const [visible, setVisible] = useState(false);
+     
 
 const toggleOverlay = () => {
   setVisible(!visible);
