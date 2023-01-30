@@ -34,9 +34,9 @@ const toggleOverlay = () => {
   
     const handleBarCodeScanned = async ({ type, data }) => {
       try {
+        
+        await fetchUser(data)
         setScanned(true);
-      
-         fetchUser(data)
          
          // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
          if(data!=null){
@@ -57,7 +57,7 @@ const toggleOverlay = () => {
       return <Text>No access to camera</Text>;
     }
   
-    console.log("STATE SCAN",state)
+    //console.log("STATE SCAN",state)
     return (
      
       <View style={styles.container}>

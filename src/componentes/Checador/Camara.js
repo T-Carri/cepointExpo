@@ -62,19 +62,6 @@ return (
 
 
 
-  
-  {state.RegistroPhotoDetail ? <Image source={{uri:state.RegistroPhotoDetail}} style={{flex:1}}/>:null}  
-  
-  {state.RegistroPhotoDetail ?
-
-<View style={styles.buttonContainer1}>
-<TouchableOpacity 
-style={styles.button1} 
-onPress={()=>(navigation.navigate('datosRegistroAsistencia'))} />
-</View>:null
-   }
-    
-
  
 
   
@@ -123,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#081109'
    
   },
-  button1: {
+   button1: {
     flex: 1,
     alignSelf: 'flex-end',
     alignItems: 'center',
@@ -133,7 +120,7 @@ const styles = StyleSheet.create({
       borderRadius: 50,
       backgroundColor: '#1BD120'
       
-  },
+  }, 
   text: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -141,4 +128,20 @@ const styles = StyleSheet.create({
   }
 })
 
-//
+/*
+
+  
+  {state.RegistroPhotoDetail ? <Image source={{uri:state.RegistroPhotoDetail}} style={{flex:1}}/>:null}  
+  
+  {state.RegistroPhotoDetail ?
+
+<View style={styles.buttonContainer1}>
+<TouchableOpacity 
+style={styles.button1} 
+onPress={()=>(navigation.navigate('datosRegistroAsistencia'))} />
+</View>:null
+   }
+    
+
+
+*/

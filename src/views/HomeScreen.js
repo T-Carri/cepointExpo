@@ -4,10 +4,11 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
+  DrawerItem
 } from '@react-navigation/drawer';
 import React, {useContext} from 'react'
 import Checador from '../componentes/Checador/Checador';
+import Almacen from '../componentes/Almacen/Almacen';
 import ControlFacturas from '../componentes/ControlFacturas/ControlFacturas';
 import EstadoNomina from '../componentes/EstadoNomina/EstadoNomina';
 import TuQR from '../componentes/TuQR/TuQR';
@@ -52,7 +53,11 @@ export default function HomeScreen(){
             backgroundColor: '#EED317'
            
           }}} />}  
-
+ {state.userAccessDetail.almacen=='administrador'&&<Drawer.Screen name="Almacen" component={Almacen} options={{  title: 'Almacen',  headerStyle: {
+            backgroundColor: '#EED317'
+           
+          }}} />} 
+    
       <Drawer.Screen name="Control de Facturas" component={ControlFacturas}  options={{   headerStyle: {
             backgroundColor: '#EED317',
           }}}/>
@@ -77,3 +82,12 @@ export default function HomeScreen(){
     },
   });
   
+
+
+
+
+  /*
+    
+  
+  
+  */
