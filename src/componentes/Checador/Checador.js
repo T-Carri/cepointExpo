@@ -51,7 +51,7 @@ useEffect(() => {
           style={{ width: 200, height: 200, marginBottom: 15, marginLeft: 50 }}
           source={require("../../../assets/200.png")}
           onPress={()=>(
-            navigation.navigate('scanner')
+            navigation.navigate('camaraRF1')
 
           )}
         />
