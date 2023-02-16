@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Card, Button } from '@rneui/themed';
-
+import moment from 'moment';
 
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../context/AuthContext';
@@ -36,6 +36,7 @@ tipoAsistencia: TipoAsistencia === 0 ? 'Entrada' : 'Salida',
 clave: Date.now(),
 date: Date(),
 presupuesto: state.PresupuestoDetail?.presupuesto || null,
+flag:state.PresupuestoDetail?.Estado || null,
 identidadChecador: user.uid,
 latitud:state.LocationDetail?state.LocationDetail.coords.latitude: null,
 longitud: state.LocationDetail?state.LocationDetail.coords.longitude : null
@@ -138,7 +139,9 @@ console.log('DATOS PUT ASISTENCIA', state?state.PutAsistenciaDetail:null, state.
           <Card.Title style={styles.subtitle}>{state ? state.RegistroAsistenciaDetail.perfil : null}</Card.Title>
           <Card.Title style={styles.subtitle}>{state ? state.RegistroAsistenciaDetail.ocupado : null}</Card.Title>
           <Card.Title style={styles.subtitle}>#{semana} semana</Card.Title>
-          <Card.Title style={styles.subtitle}>{Date()}</Card.Title>
+          <Card.Title style={styles.subtitle}>{moment().format('LT')}</Card.Title>
+          <Card.Title style={styles.subtitle}>{moment().format('L')}</Card.Title>
+         
           {!state.RegistroPhotoDetail && (
             <Button style={styles.button} onPress={handleClickCamara}>
               Tomar foto

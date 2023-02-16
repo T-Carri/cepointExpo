@@ -10,8 +10,8 @@ import Scan from './src/componentes/Checador/scan';
 
 import Datos from './src/componentes/Checador/Datos';
 import Camara from './src/componentes/Checador/Camara';
-import IngresosAlmacen from './src/componentes/Almacen/IngresosAlmacen';
-import AsignacionesAlmacen from './src/componentes/Almacen/AsignacionesAlmacen';
+/* import IngresosAlmacen from './src/componentes/Almacen/IngresosAlmacen';
+import AsignacionesAlmacen from './src/componentes/Almacen/AsignacionesAlmacen'; */
 import {AuthContextProvider} from './src/context/AuthContext'
 
 import { CepointContextProvider } from './src/context/CepointContext';
@@ -33,8 +33,6 @@ export default function App() {
        <Stack.Screen name="scanner" component={Scan} options={{ headerShown: false }}/>
        <Stack.Screen name="datosRegistroAsistencia" component={Datos}  />
        <Stack.Screen name="camara" component={Camara}  />
-       <Stack.Screen name="asignacionesAlmacen" component={AsignacionesAlmacen}  />
-       <Stack.Screen name="ingresosAlmacen" component={IngresosAlmacen}   />
     </Stack.Navigator>
   </NavigationContainer>
   
@@ -45,3 +43,5 @@ export default function App() {
 }
 
 
+{/* <Stack.Screen name="asignacionesAlmacen" component={AsignacionesAlmacen}  />
+<Stack.Screen name="ingresosAlmacen" component={IngresosAlmacen}   /> */}

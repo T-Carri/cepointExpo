@@ -15,6 +15,7 @@ export default function Checador() {
 
 console.log('test TIPO DE ASISTENCIA ', TipoAsistencia)
 
+console.log('ESTADO ', state.PresupuestoDetail)
 const navigation = useNavigation();
 
     
